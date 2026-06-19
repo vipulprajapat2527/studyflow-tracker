@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyFlow — Smart Study Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1 style="color:red;font-size:50px">TEST123</h1>
+  <div id="authScreen" style="display:block !important; position:fixed; top:20px; left:20px; background:white; color:black; z-index:999999; padding:20px; border:2px solid red;"></div>
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Password">
+  
+    <button id="signupBtn">Sign Up</button>
+    <button id="loginBtn">Login</button>
+  </div>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <div class="sidebar__logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <span class="sidebar__name">StudyFlow</span>
+          <span class="sidebar__tagline">Focus. Track. Excel.</span>
+        </div>
+      </div>
+
+      <nav class="sidebar__nav">
+        <button class="nav-item active" data-view="dashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="nav-item" data-view="study">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Study
+        </button>
+        <button class="nav-item" data-view="analytics">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Analytics
+        </button>
+        <button class="nav-item" data-view="achievements">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          Achievements
+        </button>
+        <button class="nav-item" data-view="settings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+      </nav>
+
+      <div class="sidebar__rank" id="sidebarRank">
+        <div class="rank-badge rank-badge--beginner" id="rankBadge">
+          <span class="rank-badge__icon">🌱</span>
+          <div>
+            <span class="rank-badge__title" id="rankTitle">Beginner</span>
+            <span class="rank-badge__xp" id="rankXP">0h studied</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <button class="btn-icon btn-icon--menu" id="menuToggle" aria-label="Toggle menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar__info">
+          <h1 class="topbar__greeting" id="greeting">Good morning</h1>
+          <p class="topbar__date" id="currentDate"></p>
+        </div>
+        <button class="btn-icon" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </header>
+
+      <main class="main">
+        <!-- ===== DASHBOARD VIEW ===== -->
+        <section class="view view--active" id="view-dashboard">
+          <div class="hero animate-in">
+            <div class="hero__content">
+              <div class="hero__quote">
+                <svg class="hero__quote-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" opacity="0.4"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11H10v10H0z"/></svg>
+                <p id="motivationalQuote">The secret of getting ahead is getting started.</p>
+                <span class="hero__quote-author" id="quoteAuthor">— Mark Twain</span>
+              </div>
+              <div class="hero__exam" id="examCountdown">
+                <div class="exam-countdown exam-countdown--empty">
+                  <span>Set an exam date in Settings to start countdown</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-row animate-in animate-in--delay-1">
+            <div class="stat-card stat-card--streak">
+              <div class="stat-card__icon">🔥</div>
+              <div>
+                <p class="stat-card__label">Streak</p>
+                <p class="stat-card__value" id="streakCount">0 days</p>
+              </div>
+            </div>
+            <div class="stat-card stat-card--today">
+              <div class="stat-card__icon">⏱️</div>
+              <div>
+                <p class="stat-card__label">Today</p>
+                <p class="stat-card__value" id="todayTotal">0h 0m</p>
+              </div>
+            </div>
+            <div class="stat-card stat-card--goal">
+              <div class="stat-card__icon">🎯</div>
+              <div>
+                <p class="stat-card__label">Daily Goal</p>
+                <p class="stat-card__value" id="goalDisplay">2h 0m</p>
+              </div>
+            </div>
+            <div class="stat-card stat-card--total">
+              <div class="stat-card__icon">📚</div>
+              <div>
+                <p class="stat-card__label">All Time</p>
+                <p class="stat-card__value" id="allTimeTotal">0h 0m</p>
+              </div>
+            </div>
+          </div>
+
+          <section class="card progress-card animate-in animate-in--delay-2">
+            <div class="progress-card__header">
+              <h2 class="card__title">Daily Progress</h2>
+              <span class="progress-card__percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar progress-bar--lg">
+              <div class="progress-bar__fill" id="progressFill"></div>
+            </div>
+            <p class="progress-card__subtext" id="progressSubtext">0h 0m of 2h 0m studied today</p>
+          </section>
+
+          <div class="grid-2 animate-in animate-in--delay-3">
+            <section class="card">
+              <h2 class="card__title">Today's Snapshot</h2>
+              <div class="analytics-grid" id="dailyAnalytics"></div>
+            </section>
+            <section class="card">
+              <h2 class="card__title">This Week</h2>
+              <div class="weekly-chart" id="weeklyChart"></div>
+              <div class="weekly-summary">
+                <div class="weekly-summary__item">
+                  <span class="weekly-summary__label">This week</span>
+                  <span class="weekly-summary__value" id="weekTotal">0h 0m</span>
+                </div>
+                <div class="weekly-summary__item">
+                  <span class="weekly-summary__label">Daily average</span>
+                  <span class="weekly-summary__value" id="weekAverage">0h 0m</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="card animate-in animate-in--delay-4">
+            <div class="card__header">
+              <h2 class="card__title">Recent Badges</h2>
+              <button class="btn btn--ghost btn--sm" data-view-link="achievements">View all</button>
+            </div>
+            <div class="badge-preview" id="badgePreview"></div>
+          </section>
+        </section>
+
+        <!-- ===== STUDY VIEW ===== -->
+        <section class="view" id="view-study">
+          <div class="timer-tabs">
+            <button class="timer-tab active" data-timer="free">Free Timer</button>
+            <button class="timer-tab" data-timer="pomodoro">Pomodoro</button>
+          </div>
+
+          <!-- Free Timer -->
+          <section class="card timer-card timer-panel timer-panel--active" id="freeTimerPanel">
+            <h2 class="card__title">Study Timer</h2>
+            <div class="timer-ring">
+              <svg class="timer-ring__svg" viewBox="0 0 200 200">
+                <circle class="timer-ring__bg" cx="100" cy="100" r="90"/>
+                <circle class="timer-ring__progress" id="freeRingProgress" cx="100" cy="100" r="90"/>
+              </svg>
+              <div class="timer-display" id="timerDisplay">00:00:00</div>
+            </div>
+            <div class="timer-controls">
+              <select class="select" id="timerSubject" aria-label="Select subject">
+                <option value="">Select a subject</option>
+              </select>
+              <div class="timer-buttons">
+                <button class="btn btn--primary" id="startBtn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Start
+                </button>
+                <button class="btn btn--secondary" id="pauseBtn" disabled>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  Pause
+                </button>
+                <button class="btn btn--ghost" id="stopBtn" disabled>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                  Stop
+                </button>
+              </div>
+            </div>
+            <p class="timer-status" id="timerStatus">Select a subject and press Start</p>
+          </section>
+
+          <!-- Pomodoro Timer -->
+          <section class="card timer-card timer-panel" id="pomodoroPanel">
+            <div class="pomodoro-header">
+              <h2 class="card__title">Pomodoro Timer</h2>
+              <span class="pomodoro-phase" id="pomodoroPhase">Study Session</span>
+            </div>
+            <div class="timer-ring timer-ring--pomodoro">
+              <svg class="timer-ring__svg" viewBox="0 0 200 200">
+                <circle class="timer-ring__bg" cx="100" cy="100" r="90"/>
+                <circle class="timer-ring__progress timer-ring__progress--pomodoro" id="pomoRingProgress" cx="100" cy="100" r="90"/>
+              </svg>
+              <div class="timer-display timer-display--pomodoro" id="pomodoroDisplay">25:00</div>
+            </div>
+            <div class="pomodoro-info">
+              <div class="pomodoro-stat">
+                <span class="pomodoro-stat__label">Sessions today</span>
+                <span class="pomodoro-stat__value" id="pomodoroToday">0</span>
+              </div>
+              <div class="pomodoro-stat">
+                <span class="pomodoro-stat__label">Total sessions</span>
+                <span class="pomodoro-stat__value" id="pomodoroTotal">0</span>
+              </div>
+            </div>
+            <div class="timer-controls">
+              <select class="select" id="pomodoroSubject" aria-label="Select subject for pomodoro">
+                <option value="">Select a subject</option>
+              </select>
+              <div class="timer-buttons">
+                <button class="btn btn--primary" id="pomoStartBtn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Start
+                </button>
+                <button class="btn btn--secondary" id="pomoPauseBtn" disabled>Pause</button>
+                <button class="btn btn--ghost" id="pomoSkipBtn" disabled>Skip</button>
+              </div>
+            </div>
+            <p class="timer-status" id="pomodoroStatus">25 min focus · 5 min break</p>
+          </section>
+
+          <section class="card subjects-card">
+            <div class="card__header">
+              <h2 class="card__title">Subjects</h2>
+              <button class="btn btn--sm btn--primary" id="addSubjectBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add
+              </button>
+            </div>
+            <ul class="subject-list" id="subjectList">
+              <li class="empty-state" id="emptySubjects">
+                <p>No subjects yet. Add your first subject to get started!</p>
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <!-- ===== ANALYTICS VIEW ===== -->
+        <section class="view" id="view-analytics">
+          <div class="analytics-header">
+            <h2 class="section-title">Study Analytics</h2>
+            <p class="section-subtitle">Track your progress and find patterns</p>
+          </div>
+
+          <div class="stats-row stats-row--analytics">
+            <div class="stat-card stat-card--analytics">
+              <p class="stat-card__label">Best Day (Week)</p>
+              <p class="stat-card__value" id="bestDay">—</p>
+            </div>
+            <div class="stat-card stat-card--analytics">
+              <p class="stat-card__label">vs Last Week</p>
+              <p class="stat-card__value" id="weekComparison">—</p>
+            </div>
+            <div class="stat-card stat-card--analytics">
+              <p class="stat-card__label">Active Subjects</p>
+              <p class="stat-card__value" id="activeSubjects">0</p>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <h2 class="card__title">Daily Breakdown</h2>
+              <div class="analytics-detail" id="dailyBreakdown"></div>
+            </section>
+            <section class="card">
+              <h2 class="card__title">Weekly Overview</h2>
+              <div class="analytics-detail" id="weeklyBreakdown"></div>
+            </section>
+          </div>
+
+          <section class="card">
+            <h2 class="card__title">Subject Distribution</h2>
+            <div class="subject-chart" id="subjectChart"></div>
+          </section>
+
+          <section class="card">
+            <div class="card__header">
+              <h2 class="card__title">Study Heatmap</h2>
+              <span class="heatmap-legend">
+                <span>Less</span>
+                <span class="heatmap-legend__cells">
+                  <span class="heatmap-cell heatmap-cell--0"></span>
+                  <span class="heatmap-cell heatmap-cell--1"></span>
+                  <span class="heatmap-cell heatmap-cell--2"></span>
+                  <span class="heatmap-cell heatmap-cell--3"></span>
+                  <span class="heatmap-cell heatmap-cell--4"></span>
+                </span>
+                <span>More</span>
+              </span>
+            </div>
+            <div class="heatmap" id="studyHeatmap"></div>
+          </section>
+        </section>
+
+        <!-- ===== ACHIEVEMENTS VIEW ===== -->
+        <section class="view" id="view-achievements">
+          <div class="analytics-header">
+            <h2 class="section-title">Achievements</h2>
+            <p class="section-subtitle"><span id="badgeCount">0</span> of <span id="badgeTotal">8</span> unlocked</p>
+          </div>
+          <div class="rank-showcase" id="rankShowcase"></div>
+          <div class="badge-grid" id="badgeGrid"></div>
+        </section>
+
+        <!-- ===== SETTINGS VIEW ===== -->
+        <section class="view" id="view-settings">
+          <div class="analytics-header">
+            <h2 class="section-title">Settings</h2>
+            <p class="section-subtitle">Customize your study experience</p>
+          </div>
+
+          <section class="card">
+            <h2 class="card__title">Daily Goal</h2>
+            <div class="settings-row">
+              <label class="settings-label" for="dailyGoal">Study goal (minutes)</label>
+              <div class="settings-input-group">
+                <input type="number" class="input" id="dailyGoal" min="15" max="720" step="15" value="120">
+                <button class="btn btn--secondary" id="saveGoalBtn">Save Goal</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Exam Countdown</h2>
+            <div class="settings-row">
+              <label class="settings-label" for="examName">Exam name</label>
+              <input type="text" class="input" id="examName" placeholder="e.g. Final Exams" maxlength="50">
+            </div>
+            <div class="settings-row">
+              <label class="settings-label" for="examDate">Exam date</label>
+              <div class="settings-input-group">
+                <input type="date" class="input" id="examDate">
+                <button class="btn btn--secondary" id="saveExamBtn">Save</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Notifications</h2>
+            <label class="toggle-row">
+              <span class="toggle-row__label">Sound when timer ends</span>
+              <input type="checkbox" class="toggle" id="soundToggle" checked>
+              <span class="toggle__slider"></span>
+            </label>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>StudyFlow · All data saved locally in your browser</p>
+      </footer>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-nav" id="mobileNav">
+      <button class="mobile-nav__item active" data-view="dashboard">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Home</span>
+      </button>
+      <button class="mobile-nav__item" data-view="study">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Study</span>
+      </button>
+      <button class="mobile-nav__item" data-view="analytics">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        <span>Stats</span>
+      </button>
+      <button class="mobile-nav__item" data-view="achievements">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <span>Badges</span>
+      </button>
+      <button class="mobile-nav__item" data-view="settings">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Add Subject Modal -->
+  <div class="modal-overlay" id="subjectModal" hidden>
+    <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle">Add Subject</h3>
+        <button class="btn-icon btn-icon--sm" id="closeModal" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="subjectForm">
+        <div class="form-group">
+          <label class="form-label" for="subjectName">Subject name</label>
+          <input type="text" class="input" id="subjectName" placeholder="e.g. Mathematics" required maxlength="40">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color</label>
+          <div class="color-picker" id="colorPicker"></div>
+        </div>
+        <div class="modal__actions">
+          <button type="button" class="btn btn--ghost" id="cancelModal">Cancel</button>
+          <button type="submit" class="btn btn--primary">Add Subject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Achievement Unlock Toast -->
+  <div class="achievement-toast" id="achievementToast" hidden>
+    <div class="achievement-toast__icon" id="achievementToastIcon">🏆</div>
+    <div>
+      <p class="achievement-toast__title">Achievement Unlocked!</p>
+      <p class="achievement-toast__name" id="achievementToastName"></p>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+  <script type="module" src="js/firebase.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
