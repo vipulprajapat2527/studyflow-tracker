@@ -63,3 +63,5 @@ document.addEventListener('click', async (e) => {
         }
     }
 });
+window.login = login;
+window.logout = logout;

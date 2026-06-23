@@ -1,8 +1,52 @@
-import { signup, login, logout } from "./firebase.js";
 
-(function () {
-  'use strict';
+  // 1. Logout button click hone par kya hoga
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      logout().then(() => {
+          alert("Logged out successfully!");
+          localStorage.removeItem('userLoggedIn'); // Login state clean karo
+          location.reload(); // Page refresh karke wapas login screen par bhej dega
+      }).catch((error) => {
+          console.error("Logout error: ", error);
+      });
+  });
+// Nav-items ke click ko sahi se handle karne wala dynamic code
+document.addEventListener('click', (e) => {
+  // 1. Pehle check karo ki kya click Nav-Item (Sidebar button) par hua hai?
+  const navButton = e.target.closest('.nav-item');
+  
+  // AGAR NAV-ITEM PAR CLICK NAHI HUA, TOH YAHAN SE WAPAS LAUT JAO (RETURN)
+  // Isse andar ke buttons (Add Subject, Timer) bilkul sahi kaam karenge!
+  if (!navButton) return; 
 
+  // 2. Agar navButton mila, tabhi aage ka code chalega
+  const view = navButton.getAttribute('data-view');
+  console.log("Mila target view:", view);
+  
+  if (view) {
+      // Saare buttons se active class hatao
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      navButton.classList.add('active');
+      
+      // Saare sections ko chhupao
+      document.querySelectorAll('.view, .view-section').forEach(sec => {
+          sec.style.display = 'none';
+      });
+      
+      // Target section dikhao
+      const targetSection = document.getElementById('view-' + view) || document.getElementById(view);
+      if (targetSection) {
+          targetSection.style.display = 'block';
+      }
+  }
+});
+
+ // 2. Temporary Check: Kya user pehle se logged in hai?
+const authScreen = document.getElementById('authScreen');
+if (localStorage.getItem('userLoggedIn') === 'true') {
+    if (authScreen) authScreen.style.setProperty('display', 'none', 'important');
+} else {
+    if (authScreen) authScreen.style.setProperty('display', 'flex', 'important');
+}
   const STORAGE_KEY = 'studyTrackerData';
   const POMO_STUDY = 25 * 60;
   const POMO_BREAK = 5 * 60;
@@ -1079,29 +1123,41 @@ document.getElementById("signupBtn")?.addEventListener("click", async () => {
   try {
     await signup(email, password);
     alert("Signup Successful");
+    localStorage.setItem('userLoggedIn', 'true');
+    location.reload()
   } catch (error) {
     alert(error.message);
   }
 });
 
-document.getElementById("loginBtn")?.addEventListener("click", async () => {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-
-  try {
-    await login(email, password);
-    alert("Login Successful");
-  } catch (error) {
-    alert(error.message);
+// Login Handler
+document.getElementById("loginBtn")?.addEventListener("click", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("loginEmail")?.value;
+  const password = document.getElementById("loginPassword")?.value;
+  
+  if (typeof window.login === "function") {
+      try {
+          await window.login(email, password);
+          alert("Login Successful!");
+          localStorage.setItem('userLoggedIn', 'true');
+          location.reload();
+      } catch (error) {
+          alert("Login Error: " + error.message);
+      }
   }
 });
 
+// Logout Handler
 document.getElementById("logoutBtn")?.addEventListener("click", async () => {
-  try {
-    await logout();
-    alert("Logged Out");
-  } catch (error) {
-    alert(error.message);
+  if (typeof window.logout === "function") {
+      try {
+          await window.logout();
+          alert("Logged Out!");
+          localStorage.removeItem('userLoggedIn');
+          location.reload();
+      } catch (error) {
+          alert(error.message);
+      }
   }
 });
-})();
