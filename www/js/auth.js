@@ -64,4 +64,5 @@ document.addEventListener('click', async (e) => {
     }
 });
 window.login = login;
+window.signup = signup;
 window.logout = logout;

@@ -1145,6 +1145,8 @@ document.getElementById("loginBtn")?.addEventListener("click", async (e) => {
       } catch (error) {
           alert("Login Error: " + error.message);
       }
+  } else {
+    alert("Bhai, thoda ruko, background script load ho rhi hai.");
   }
 });
 
