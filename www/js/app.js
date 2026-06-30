@@ -16,13 +16,13 @@ document.addEventListener('click', (e) => {
   
   // AGAR NAV-ITEM PAR CLICK NAHI HUA, TOH YAHAN SE WAPAS LAUT JAO (RETURN)
   // Isse andar ke buttons (Add Subject, Timer) bilkul sahi kaam karenge!
-  if (!navButton) return; 
+  if (navButton) { 
 
   // 2. Agar navButton mila, tabhi aage ka code chalega
   const view = navButton.getAttribute('data-view');
   console.log("Mila target view:", view);
   
-  if (view) {
+ 
       // Saare buttons se active class hatao
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
       navButton.classList.add('active');
@@ -37,7 +37,8 @@ document.addEventListener('click', (e) => {
       if (targetSection) {
           targetSection.style.display = 'block';
       }
-  }
+  
+}
 });
 
  // 2. Temporary Check: Kya user pehle se logged in hai?
