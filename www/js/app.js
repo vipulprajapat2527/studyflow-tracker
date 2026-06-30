@@ -9,36 +9,34 @@
           console.error("Logout error: ", error);
       });
   });
-// Nav-items ke click ko sahi se handle karne wala dynamic code
+// Pure page ke clicks ko handle karne wala master code
 document.addEventListener('click', (e) => {
-  // 1. Pehle check karo ki kya click Nav-Item (Sidebar button) par hua hai?
-  const navButton = e.target.closest('.nav-item');
+  // 1. Check karo ki kya sidebar (.nav-item) ya mobile bottom navigation button par click hua hai
+  // Apne HTML ke mutabik check kar lena agar bottom buttons par alag class ho (jaise .nav-link ya .bottom-nav-item)
+  const navButton = e.target.closest('.nav-item') || e.target.closest('[data-view]');
   
-  // AGAR NAV-ITEM PAR CLICK NAHI HUA, TOH YAHAN SE WAPAS LAUT JAO (RETURN)
-  // Isse andar ke buttons (Add Subject, Timer) bilkul sahi kaam karenge!
-  if (navButton) { 
-
-  // 2. Agar navButton mila, tabhi aage ka code chalega
-  const view = navButton.getAttribute('data-view');
-  console.log("Mila target view:", view);
-  
- 
-      // Saare buttons se active class hatao
-      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-      navButton.classList.add('active');
-      
-      // Saare sections ko chhupao
-      document.querySelectorAll('.view, .view-section').forEach(sec => {
-          sec.style.display = 'none';
-      });
-      
-      // Target section dikhao
-      const targetSection = document.getElementById('view-' + view) || document.getElementById(view);
-      if (targetSection) {
-          targetSection.style.display = 'block';
-      }
+  if (navButton) {
+      const view = navButton.getAttribute('data-view');
+      if (view) {
+          console.log("Mila target view:", view);
+          
+          // Saare nav buttons se active class hatao (chahe sidebar ho ya bottom bar)
+          document.querySelectorAll('.nav-item, [data-view]').forEach(btn => btn.classList.remove('active'));
+          navButton.classList.add('active');
+          
+          // Saare sections ko chhupao
+          document.querySelectorAll('.view, .view-section').forEach(sec => {
+              sec.style.display = 'none';
+          });
+          
+          // Target section ko dikhao
+          const targetSection = document.getElementById('view-' + view);
+          if (targetSection) {
+              targetSection.style.display = 'block';
+          }
   
 }
+  }
 });
 
  // 2. Temporary Check: Kya user pehle se logged in hai?
