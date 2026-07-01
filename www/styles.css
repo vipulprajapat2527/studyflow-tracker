@@ -1724,4 +1724,35 @@ html, body {
     min-width: 0 !important; /* Agar kahin min-width fasa ho toh reset ho jaye */
     box-sizing: border-box !important;
 }
+/* Mobile screen zoom-overflow reset */
+@media (max-width: 480px) {
+  /* Pure viewport container ko strictly hide karo horizontal overflow se */
+  html, body, #app, .app-container, main {
+      width: 100vw !important;
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+      margin: 0 !important;
+      padding: 0 !important;
+  }
+
+  /* Home page ka wrapper dabba aur uske direct children */
+  #view-home, .home-container, .dashboard-container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding-left: 15px !important;
+      padding-right: 15px !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+  }
+
+  /* Nelson Mandela wala Quote card grid/flex ko compress karo */
+  .hero, .hero-section, .quote-card {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      box-sizing: border-box !important;
+  }
+}
 }
