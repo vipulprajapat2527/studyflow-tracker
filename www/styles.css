@@ -1669,4 +1669,17 @@ button, input, select { font-family: inherit; }
   .timer-display--pomodoro { font-size: 2.25rem; }
 
   .badge-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Home page ke stretch hone wale pange ka permanent ilaj */
+#view-home, .view {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important; /* Bahar nikalne wala content chhup jaye */
+  box-sizing: border-box !important;
+}
+
+/* Home page ke andar jitne bhi cards, quotes, ya progress blocks hain unhe boundary me rakho */
+#view-home * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
 }
