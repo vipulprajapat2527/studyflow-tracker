@@ -1682,4 +1682,25 @@ button, input, select { font-family: inherit; }
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
+/* Sidebar jo bahar nikal kar zoom-in kar rha hai, use mobile par default hide karo */
+.sidebar, aside, [id*="sidebar"] {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  transform: translateX(-100%) !important; /* Default screen ke bahar feko */
+  transition: transform 0.3s ease !important;
+  z-index: 9999 !important;
+}
+
+/* Jab sidebar par active class ho tabhi mobile me dikhe */
+.sidebar.active, aside.active, [id*="sidebar"].active {
+  transform: translateX(0) !important;
+}
+
+/* Poore page ka horizontal stretch band karo */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  position: relative !important;
+}
 }
