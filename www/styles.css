@@ -1713,4 +1713,15 @@ html, body {
   overflow-x: hidden !important;
   display: block !important;
 }
+/* Home page ke andar jitne cards, containers, grid ya charts hain, unki fixed width dabba do */
+#view-home div, 
+#view-home section, 
+#view-home .card, 
+#view-home .analytics-card, 
+#view-home .hero {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important; /* Agar kahin min-width fasa ho toh reset ho jaye */
+    box-sizing: border-box !important;
+}
 }
