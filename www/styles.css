@@ -1682,25 +1682,35 @@ button, input, select { font-family: inherit; }
   max-width: 100% !important;
   box-sizing: border-box !important;
 }
-/* Sidebar jo bahar nikal kar zoom-in kar rha hai, use mobile par default hide karo */
+/* 1. Sidebar core rules - Default mobile par band rahega */
 .sidebar, aside, [id*="sidebar"] {
   position: fixed !important;
   left: 0 !important;
   top: 0 !important;
-  transform: translateX(-100%) !important; /* Default screen ke bahar feko */
+  transform: translateX(-100%); /* !important hataya taaki active class toggle ho sake */
   transition: transform 0.3s ease !important;
   z-index: 9999 !important;
+  width: 280px !important; /* Sidebar ki fixed width lock ki */
 }
 
-/* Jab sidebar par active class ho tabhi mobile me dikhe */
+/* 2. Jab JS open karne ke liye active class lagaye */
 .sidebar.active, aside.active, [id*="sidebar"].active {
   transform: translateX(0) !important;
 }
 
-/* Poore page ka horizontal stretch band karo */
+/* 3. Poore viewport ko scale control dene ke liye layout boundary */
 html, body {
   overflow-x: hidden !important;
   width: 100% !important;
+  max-width: 100% !important;
   position: relative !important;
+}
+
+/* 4. Home page ke blocks ko forced horizontal container me rakhna */
+#view-home {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  display: block !important;
 }
 }
