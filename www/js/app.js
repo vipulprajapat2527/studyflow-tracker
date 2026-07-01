@@ -1102,6 +1102,7 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !els.subjectModal.hidden) closeModalFn();
     });
+  }
   function init() {
     applyTheme();
     initColorPicker();
@@ -1114,7 +1115,7 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     setPomodoroButtons();
     renderAll();
   }
-}
+
 document.getElementById("signupBtn")?.addEventListener("click", async () => {
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
