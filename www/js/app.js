@@ -1162,3 +1162,11 @@ document.getElementById("logoutBtn")?.addEventListener("click", async () => {
       }
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof init === "function") {
+        init();
+        console.log("🚀 StudyFlow Core Engine Successfully Started!");
+    } else {
+        console.warn("⚠️ init function nahi mili! Check karo app.js sahi se load hui hai ya nahi.");
+    }
+});
