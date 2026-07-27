@@ -1171,3 +1171,383 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("⚠️ init function nahi mili! Check karo app.js sahi se load hui hai ya nahi.");
     }
 });
+// --- Ultra-Safe Live Card Sync & Share ---
+function syncWrappedCardData() {
+  try {
+    let streakText = "0 Days";
+    let hoursText = "0m";
+    let subjectText = "General";
+    let rankText = "Beginner 🌱";
+
+    // 1. Safe State Reading
+    if (typeof state !== 'undefined' && state) {
+      if (state.streak && state.streak.current !== undefined) {
+        streakText = state.streak.current + " Days";
+      }
+      if (Array.isArray(state.subjects) && state.subjects.length > 0) {
+        subjectText = state.subjects[0].name || "General";
+      }
+    }
+
+    // 2. Safe DOM Updates
+    const hoursEl = document.getElementById('wrapped-hours');
+    const streakEl = document.getElementById('wrapped-streak');
+    const subjectEl = document.getElementById('wrapped-subject');
+    const rankEl = document.getElementById('wrapped-rank');
+
+    if (hoursEl) hoursEl.innerText = hoursText;
+    if (streakEl) streakEl.innerText = '🔥 ' + streakText;
+    if (subjectEl) subjectEl.innerText = '📚 ' + subjectText;
+    if (rankEl) rankEl.innerText = rankText;
+  } catch (err) {
+    console.warn("Wrapped Sync Warning: ", err);
+  }
+}
+
+async function shareWrappedCard() {
+  try {
+    const card = document.getElementById('study-wrapped-card');
+    const btn = document.getElementById('shareCardBtn');
+
+    if (!card) return;
+
+    syncWrappedCardData();
+
+    // Check if html2canvas library is ready
+    if (typeof html2canvas === 'undefined') {
+      alert("Library loading... Please try again in 2 seconds.");
+      return;
+    }
+
+    const originalText = btn ? btn.innerText : "";
+    if (btn) btn.innerText = "⏳ Generating Card...";
+
+    const canvas = await html2canvas(card, { scale: 2 });
+
+    canvas.toBlob(async (blob) => {
+      try {
+        if (!blob) {
+          if (btn) btn.innerText = originalText;
+          return;
+        }
+
+        const file = new File([blob], 'my-studyflow-report.png', { type: 'image/png' });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: 'My StudyFlow Progress',
+            text: 'Check out my study streak on StudyFlow! 🚀',
+            files: [file]
+          });
+        } else {
+          const link = document.createElement('a');
+          link.download = 'my-studyflow-report.png';
+          link.href = canvas.toDataURL();
+          link.click();
+        }
+      } catch (e) {
+        console.log("Sharing cancelled or error:", e);
+      } finally {
+        if (btn) btn.innerText = originalText;
+      }
+    });
+
+  } catch (err) {
+    console.error("Share Card Error: ", err);
+  }
+}
+function updateWrappedCardData(weeklyTimeText, streakCount, topSubText, userRankText) {
+  const hoursEl = document.getElementById('wrapped-hours');
+  const streakEl = document.getElementById('wrapped-streak');
+  const subjectEl = document.getElementById('wrapped-subject');
+  const rankEl = document.getElementById('wrapped-rank');
+
+  if (hoursEl) hoursEl.innerText = weeklyTimeText || "0m";
+  if (streakEl) streakEl.innerText = "🔥 " + (streakCount || 0) + " Days";
+  if (subjectEl) subjectEl.innerText = "📚 " + (topSubText || "None");
+  if (rankEl) rankEl.innerText = (userRankText || "Beginner") + " 🏆";
+}
+// --- Auto-Sync Card with Real App Data ---
+function autoSyncCardData() {
+  try {
+    if (typeof state === 'undefined' || !state) return;
+
+    // 1. Real Streak
+    const streak = (state.streak && state.streak.current) ? state.streak.current : 0;
+
+    // 2. Real Total Study Time
+    let totalMinutes = 0;
+    if (Array.isArray(state.sessions)) {
+      state.sessions.forEach(session => {
+        const m = session.durationMinutes || session.minutes || Math.floor((session.duration || 0) / 60) || 0;
+        totalMinutes += m;
+      });
+    }
+
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    const timeText = hours > 0 ? (hours + "h " + mins + "m") : (mins + "m");
+
+    // 3. Top Subject
+    let topSub = "General";
+    if (Array.isArray(state.subjects) && state.subjects.length > 0) {
+      topSub = state.subjects[0].name || "General";
+    }
+
+    // 4. Rank
+    let rank = "Learner";
+    if (hours >= 50) rank = "Master 👑";
+    else if (hours >= 10) rank = "Warrior ⚔️";
+    else rank = "Beginner 🌱";
+
+    // Card me UI update karo
+    updateWrappedCardData(timeText, streak, topSub, rank);
+  } catch (e) {
+    console.log("Sync error:", e);
+  }
+}
+
+// App chalte hi har 2 second me card ko live sync karega
+setInterval(autoSyncCardData, 2000);
+// --- Smart 10 Themes Switcher (Direct CSS Injector) ---
+const themeColorMap = {
+  purple:   { primary: '#6c5ce7', accent: '#a29bfe' },
+  pink:     { primary: '#fd79a8', accent: '#ffb8d2' },
+  lavender: { primary: '#a29bfe', accent: '#d6d2ff' },
+  rose:     { primary: '#e84393', accent: '#ff76b8' },
+  peach:    { primary: '#ff7675', accent: '#ffabe7' },
+  mint:     { primary: '#00b894', accent: '#55efc4' },
+  sky:      { primary: '#0984e3', accent: '#74b9ff' },
+  cyan:     { primary: '#00cec9', accent: '#81ecec' },
+  butter:   { primary: '#fdcb6e', accent: '#ffeaa7' },
+  emerald:  { primary: '#2ed573', accent: '#7bed9f' }
+};
+
+function changeAppTheme(themeName) {
+  const theme = themeColorMap[themeName] || themeColorMap['purple'];
+  
+  // 1. Data-theme attribute set karo
+  document.body.setAttribute('data-theme', themeName);
+
+  // 2. Dynamic Style Tag Inject/Update karo (CSS ki urat hi nahi)
+  let styleTag = document.getElementById('dynamic-theme-override');
+  if (!styleTag) {
+    styleTag = document.createElement('style');
+    styleTag.id = 'dynamic-theme-override';
+    document.head.appendChild(styleTag);
+  }
+
+  // Pure app me variables overwrite kar do
+  styleTag.innerHTML = `
+    :root, body, [data-theme="${themeName}"] {
+      --primary-color: ${theme.primary} !important;
+      --primary: ${theme.primary} !important;
+      --accent-color: ${theme.accent} !important;
+      --accent: ${theme.accent} !important;
+    }
+    .wrapped-card, .btn-primary, .primary-bg, .task-item input:checked {
+      background: ${theme.primary} !important;
+    }
+    .wrapped-hero h2, .note-item h4 {
+      color: ${theme.accent} !important;
+    }
+  `;
+
+  // 3. LocalStorage me save karo
+  localStorage.setItem('studyflow_theme', themeName);
+}
+
+// App Load hote hi saved theme wapas apply karo
+window.addEventListener('DOMContentLoaded', function() {
+  const savedTheme = localStorage.getItem('studyflow_theme') || 'purple';
+  changeAppTheme(savedTheme);
+});
+// --- Syllabus Tracker (Connected to App's Subjects) ---
+let syllabusTasks = JSON.parse(localStorage.getItem('studyflow_syllabus')) || [];
+
+function syncSyllabusSubjectsDropdown() {
+  const select = document.getElementById('syllabus-subject-select');
+  if (!select) return;
+
+  const currentSelected = select.value;
+  select.innerHTML = '';
+
+  let subList = [];
+
+  // 1. App ke state se subjects fetch karo
+  if (typeof state !== 'undefined' && state && Array.isArray(state.subjects) && state.subjects.length > 0) {
+    subList = state.subjects.map(s => typeof s === 'string' ? s : (s.name || 'General'));
+  }
+
+  // 2. LocalStorage fallback
+  if (subList.length === 0) {
+    try {
+      const localState = JSON.parse(localStorage.getItem('studyflow_state') || '{}');
+      if (localState && Array.isArray(localState.subjects)) {
+        subList = localState.subjects.map(s => typeof s === 'string' ? s : (s.name || 'General'));
+      }
+    } catch(e) {}
+  }
+
+  if (subList.length === 0) subList = ['General'];
+
+  // Duplicate names hatao
+  subList = [...new Set(subList)];
+
+  // Dropdown populate karo
+  subList.forEach(sub => {
+    const opt = document.createElement('option');
+    opt.value = sub;
+    opt.textContent = '📚 ' + sub;
+    select.appendChild(opt);
+  });
+
+  if (currentSelected && subList.includes(currentSelected)) {
+    select.value = currentSelected;
+  }
+}
+
+function saveAndRenderSyllabus() {
+  localStorage.setItem('studyflow_syllabus', JSON.stringify(syllabusTasks));
+  renderSyllabusList();
+}
+
+function addChapterTask() {
+  const input = document.getElementById('chapter-input');
+  const subjectSelect = document.getElementById('syllabus-subject-select');
+  
+  const text = input ? input.value.trim() : '';
+  const selectedSubject = subjectSelect ? subjectSelect.value : 'General';
+
+  if (!text) return;
+
+  syllabusTasks.push({
+    id: Date.now(),
+    text: text,
+    subject: selectedSubject,
+    completed: false
+  });
+
+  input.value = '';
+  saveAndRenderSyllabus();
+}
+
+function toggleTaskComplete(id) {
+  syllabusTasks = syllabusTasks.map(task => {
+    if (task.id === id) task.completed = !task.completed;
+    return task;
+  });
+  saveAndRenderSyllabus();
+}
+
+function deleteTask(id) {
+  syllabusTasks = syllabusTasks.filter(task => task.id !== id);
+  saveAndRenderSyllabus();
+}
+
+function renderSyllabusList() {
+  syncSyllabusSubjectsDropdown();
+
+  const list = document.getElementById('syllabus-task-list');
+  const subjectSelect = document.getElementById('syllabus-subject-select');
+  if (!list) return;
+
+  const currentSubject = subjectSelect ? subjectSelect.value : 'General';
+  list.innerHTML = '';
+  
+  const filteredTasks = syllabusTasks.filter(task => (task.subject || 'General') === currentSubject);
+
+  let completedCount = 0;
+
+  filteredTasks.forEach(task => {
+    if (task.completed) completedCount++;
+
+    const li = document.createElement('li');
+    const isChecked = task.completed ? 'checked' : '';
+    const completedClass = task.completed ? 'completed' : '';
+
+    li.className = 'task-item ' + completedClass;
+    li.innerHTML = 
+      '<div class="task-item-left">' +
+        '<input type="checkbox" ' + isChecked + ' onchange="toggleTaskComplete(' + task.id + ')">' +
+        '<span>' + task.text + '</span>' +
+      '</div>' +
+      '<button class="delete-btn" onclick="deleteTask(' + task.id + ')">🗑️</button>';
+
+    list.appendChild(li);
+  });
+
+  const total = filteredTasks.length;
+  const percent = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+  
+  const textEl = document.getElementById('syllabus-progress-text');
+  const fillEl = document.getElementById('syllabus-progress-fill');
+
+  if (textEl) textEl.innerText = percent + '%';
+  if (fillEl) fillEl.style.width = percent + '%';
+}
+
+// Har 1.5 second me update automatic synchronise hota rahega
+setInterval(renderSyllabusList, 1500);
+// --- Quick Notes Logic ---
+let quickNotes = JSON.parse(localStorage.getItem('studyflow_notes')) || [];
+
+function saveAndRenderNotes() {
+  localStorage.setItem('studyflow_notes', JSON.stringify(quickNotes));
+  renderQuickNotes();
+}
+
+function addQuickNote() {
+  const titleInput = document.getElementById('note-title-input');
+  const contentInput = document.getElementById('note-content-input');
+
+  const title = titleInput ? titleInput.value.trim() : '';
+  const content = contentInput ? contentInput.value.trim() : '';
+
+  if (!title && !content) return;
+
+  quickNotes.unshift({
+    id: Date.now(),
+    title: title || 'Untitled Note',
+    content: content,
+    date: new Date().toLocaleDateString()
+  });
+
+  if (titleInput) titleInput.value = '';
+  if (contentInput) contentInput.value = '';
+
+  saveAndRenderNotes();
+}
+
+function deleteQuickNote(id) {
+  quickNotes = quickNotes.filter(note => note.id !== id);
+  saveAndRenderNotes();
+}
+
+function renderQuickNotes() {
+  const container = document.getElementById('quick-notes-list');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  if (quickNotes.length === 0) {
+    container.innerHTML = '<p style="color: #777; font-size: 13px; text-align: center;">Koi saved note nahi hai. Naya note add karein!</p>';
+    return;
+  }
+
+  quickNotes.forEach(note => {
+    const div = document.createElement('div');
+    div.className = 'note-item';
+    div.innerHTML = 
+      '<div class="note-item-header">' +
+        '<h4>' + note.title + '</h4>' +
+        '<button class="delete-note-btn" onclick="deleteQuickNote(' + note.id + ')">🗑️</button>' +
+      '</div>' +
+      '<p>' + note.content + '</p>';
+
+    container.appendChild(div);
+  });
+}
+
+// Page load hote hi render kar do
+setTimeout(renderQuickNotes, 500);

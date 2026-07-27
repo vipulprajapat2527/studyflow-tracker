@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     .nav-item svg, .nav-item span {
         pointer-events: none;
@@ -194,6 +195,50 @@
             <button class="timer-tab active" data-timer="free">Free Timer</button>
             <button class="timer-tab" data-timer="pomodoro">Pomodoro</button>
           </div>
+          <!-- --- Syllabus & Task Checklist Section --- -->
+<div class="syllabus-card">
+  <h2>📚 Syllabus Tracker</h2>
+  <!-- Subject Select Dropdown -->
+<div style="margin-bottom: 12px;">
+  <select id="syllabus-subject-select" onchange="renderSyllabusList()" style="width: 100%; padding: 10px; border-radius: 8px; background: #2b2b3d; color: #fff; border: 1px solid #333; outline: none; font-size: 14px; cursor: pointer;">
+    <!-- App ke subjects automatic yahan aayenge -->
+  </select>
+</div>
+
+  
+  <div class="syllabus-input-group">
+    <input type="text" id="chapter-input" placeholder="Chapter / enter topic name..." />
+    <button onclick="addChapterTask()">+ Add</button>
+  </div>
+  
+
+  <!-- Live Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-info">
+      <span>Syllabus Completed</span>
+      <span id="syllabus-progress-text">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div id="syllabus-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+    </div>
+  </div>
+
+  <!-- Task Checklist List -->
+  <ul id="syllabus-task-list" class="task-list"></ul>
+</div>
+<!-- --- Quick Notes Section --- -->
+<div class="notes-card">
+  <h2>📝 Quick Notes & Revision</h2>
+  
+  <div class="notes-input-group">
+    <input type="text" id="note-title-input" placeholder="Note Title (e.g., C Variable Swap Formula)..." />
+    <textarea id="note-content-input" rows="3" placeholder="Yahan detail/code logic type karo..."></textarea>
+    <button onclick="addQuickNote()">+ Save Note</button>
+  </div>
+
+  <!-- Saved Notes Container -->
+  <div id="quick-notes-list" class="notes-grid"></div>
+</div>
 
           <!-- Free Timer -->
           <section class="card timer-card timer-panel timer-panel--active" id="freeTimerPanel">
@@ -288,6 +333,58 @@
             <h2 class="section-title">Study Analytics</h2>
             <p class="section-subtitle">Track your progress and find patterns</p>
           </div>
+          <!-- Theme Picker Buttons (10 Aesthetic Colors) -->
+<div class="theme-selector-container" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+  <span style="font-size: 12px; align-self: center; color: #aaa;">Theme:</span>
+  <button class="theme-btn" style="background: #6c5ce7;" onclick="changeAppTheme('purple')" title="Cyber Violet"></button>
+  <button class="theme-btn" style="background: #fd79a8;" onclick="changeAppTheme('pink')" title="Soft Pastel Pink"></button>
+  <button class="theme-btn" style="background: #a29bfe;" onclick="changeAppTheme('lavender')" title="Lavender / Lilac"></button>
+  <button class="theme-btn" style="background: #e84393;" onclick="changeAppTheme('rose')" title="Rose Gold"></button>
+  <button class="theme-btn" style="background: #ff7675;" onclick="changeAppTheme('peach')" title="Peach Coral"></button>
+  <button class="theme-btn" style="background: #55efc4;" onclick="changeAppTheme('mint')" title="Matcha Mint"></button>
+  <button class="theme-btn" style="background: #74b9ff;" onclick="changeAppTheme('sky')" title="Aesthetic Sky Blue"></button>
+  <button class="theme-btn" style="background: #00cec9;" onclick="changeAppTheme('cyan')" title="Neon Cyan"></button>
+  <button class="theme-btn" style="background: #fdcb6e;" onclick="changeAppTheme('butter')" title="Butter Yellow"></button>
+  <button class="theme-btn" style="background: #2ed573;" onclick="changeAppTheme('emerald')" title="Emerald Green"></button>
+</div>
+          <!-- Study Wrapped Card Section -->
+      <div class="wrapped-card-container">
+        <div id="study-wrapped-card" class="wrapped-card">
+          <div class="wrapped-header">
+            <span class="wrapped-logo"> StudyFlow</span>
+            <span class="wrapped-tag">Weekly Report</span>
+          </div>
+          
+          <div class="wrapped-hero">
+            <h2 id="wrapped-hours">0h 0m</h2>
+            <p>Studied This Week</p>
+          </div>
+
+          <div class="wrapped-stats-grid">
+            <div class="stat-box">
+              <span id="wrapped-streak">🔥 0 Days</span>
+              <small>Current Streak</small>
+            </div>
+            <div class="stat-box">
+              <span id="wrapped-subject">📚 None</span>
+              <small>Top Subject</small>
+            </div>
+          </div>
+
+          <div class="wrapped-badge">
+            <span>Rank: <strong id="wrapped-rank">Learner 🏆</strong></span>
+          </div>
+
+          <div class="wrapped-footer">
+            <p>Track your study goals with StudyFlow 🚀</p>
+          </div>
+        </div>
+
+        <!-- Share Button -->
+        <button id="shareCardBtn" onclick="shareWrappedCard()" class="share-btn">
+          📸 Share Progress Card
+        </button>
+      </div>
 
           <div class="stats-row stats-row--analytics">
             <div class="stat-card stat-card--analytics">
@@ -463,6 +560,122 @@
 <script type="module" src="js/auth.js?v=4"></script>
 <script defer src="js/app.js?v=4"></script>
   
- 
+ <!-- Sidebar ko haath se left swipe karne par automatic band karne ka code -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      let touchstartX = 0;
+      let touchendX = 0;
+  
+      // Tumhare sidebar element ko automatic dhoondhega
+      const sidebar = document.querySelector('.sidebar') || document.querySelector('[class*="sidebar"]') || document.querySelector('[class*="drawer"]');
+  
+      if (sidebar) {
+          sidebar.addEventListener('touchstart', e => {
+              touchstartX = e.changedTouches[0].screenX;
+          }, { passive: true });
+  
+          sidebar.addEventListener('touchend', e => {
+              touchendX = e.changedTouches[0].screenX;
+              // Agar user ne left ki taraf 60px se zyada swipe kiya
+              if (touchstartX - touchendX > 60) {
+                  // Sidebar ke andar ke active item ya kisi bhi link par click trigger karega jo ise band kar de
+                  const closeTarget = sidebar.querySelector('.active') || sidebar.querySelector('a') || sidebar.querySelector('button');
+                  if (closeTarget) {
+                      closeTarget.click();
+                  }
+              }
+          }, { passive: true });
+      }
+  });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let startX = 0;
+        let startY = 0;
+    
+        // Niche ke tabs ko target karne ke liye buttons/links ki classes (Home, Study, Stats etc.)
+        const tabButtons = Array.from(document.querySelectorAll('.nav-tabs a, .bottom-nav a, [class*="nav"] a, [class*="nav"] button, footer button'));
+    
+        if (tabButtons.length === 0) return;
+    
+        window.addEventListener('touchstart', (e) => {
+            // Agar sidebar khula hai toh tab swipe band rahega
+            if (document.querySelector('.sidebar.active') || document.querySelector('[class*="sidebar"].active')) return;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+    
+        window.addEventListener('touchend', (e) => {
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+    
+            let diffX = startX - endX;
+            let diffY = startY - endY;
+    
+            // Check karega ki perfect left/right swipe hua hai ya nahi
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
+                
+                // Pata lagao current page index kaun sa hai (kaun sa icon active hai)
+                let currentIndex = tabButtons.findIndex(btn => 
+                    btn.classList.contains('active') || 
+                    btn.parentElement.classList.contains('active')
+                );
+    
+                if (currentIndex === -1) currentIndex = 0;
+    
+                // LEFT SWIPE -> Instagram style agla page button click karega
+                if (diffX > 60 && currentIndex < tabButtons.length - 1) {
+                    if (tabButtons[currentIndex + 1]) {
+                        tabButtons[currentIndex + 1].click();
+                    }
+                } 
+                // RIGHT SWIPE -> Pichla page button click karega
+                else if (diffX < -60 && currentIndex > 0) {
+                    if (tabButtons[currentIndex - 1]) {
+                        tabButtons[currentIndex - 1].click();
+                    }
+                }
+            }
+        }, { passive: true });
+    });
+    </script>
+    <script>
+    // Universal Timer Full Screen Selector (Free + Pomodoro)
+    document.addEventListener('DOMContentLoaded', () => {
+        const studySection = document.querySelector('#view-study');
+    
+        if (studySection) {
+            studySection.addEventListener('click', (e) => {
+                // Check karega ki click button par hua hai ya nahi
+                const targetButton = e.target.closest('button, .btn');
+                if (!targetButton) return;
+    
+                const btnText = targetButton.textContent.trim().toLowerCase();
+    
+                // 1. Agar kisi bhi timer ka START button daba
+                if (btnText.includes('start') || btnText.includes('resume') || targetButton.id.includes('start')) {
+                    document.body.classList.add('fullscreen-timer-active');
+                }
+                
+                // 2. Agar STOP, PAUSE, RESET ya CANCEL daba toh wapas normal
+                if (btnText.includes('stop') || btnText.includes('cancel') || btnText.includes('reset') || btnText.includes('pause') || targetButton.id.includes('stop') || targetButton.id.includes('reset')) {
+                    document.body.classList.remove('fullscreen-timer-active');
+                }
+            });
+        }
+    });
+</script>
+<script>
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyB5GgOy9iay_fTJvCrLjVIexlZL9PWwkmo",
+  authDomain: "studyflow-tracker-3c8a5.firebaseapp.com",
+  projectId: "studyflow-tracker-3c8a5",
+  storageBucket: "studyflow-tracker-3c8a5.firebasestorage.app",
+  messagingSenderId: "183185955176",
+  appId: "1:183185955176:web:4ffeb45fee2a7b79261edd",
+  measurementId: "G-PWRFRTEVZH"
+};
+</script>
 </body>
 </html>
