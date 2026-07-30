@@ -16,22 +16,7 @@
   </style>
 </head>
 <body>
-  <h1 style="color: red; font-size: 50px; text-align: center;"></h1>
-    
-  <div id="authScreen" style="display: flex !important; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; color: #000000; z-index: 2147483647 !important; pointer-events: auto !important; overflow: hidden;">
-    
-    <h1 style="color: red; font-size: 50px; text-align: center; margin-bottom: 10px;">StudyFlow</h1>
-    <h2 style="margin-bottom: 20px;">Login</h2>
-    
-    <input type="email" id="loginEmail" placeholder="Email" style="margin: 10px; padding: 12px; width: 260px; border: 1px solid #ccc; border-radius: 4px;">
-    <input type="password" id="loginPassword" placeholder="Password" style="margin: 10px; padding: 12px; width: 260px; border: 1px solid #ccc; border-radius: 4px;">
-    
-    <div style="margin-top: 15px;">
-        <button id="signupBtn" type="button" style="padding: 10px 20px; margin-right: 10px; cursor: pointer; background: #e5e7eb; border: none; border-radius: 4px; font-weight: bold;">Sign Up</button>
-        <button id="loginBtn" type="button" style="padding: 10px 20px; cursor: pointer; background: #4f46e5; color: white; border: none; border-radius: 4px; font-weight: bold;">Login</button>
-    </div>
-
-</div>
+  
   <div class="app-shell">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -283,7 +268,7 @@
                 <circle class="timer-ring__bg" cx="100" cy="100" r="90"/>
                 <circle class="timer-ring__progress timer-ring__progress--pomodoro" id="pomoRingProgress" cx="100" cy="100" r="90"/>
               </svg>
-              <div class="timer-display timer-display--pomodoro" id="pomodoroDisplay">25:00</div>
+              <div class="timer-display timer-display--pomodoro" id="pomodoroDisplay">00:00</div>
             </div>
             <div class="pomodoro-info">
               <div class="pomodoro-stat">
@@ -305,10 +290,10 @@
                   Start
                 </button>
                 <button class="btn btn--secondary" id="pomoPauseBtn" disabled>Pause</button>
-                <button class="btn btn--ghost" id="pomoSkipBtn" disabled>Skip</button>
+                <button class="btn btn--ghost" id="pomoSkipBtn" disabled>stop</button>
               </div>
             </div>
-            <p class="timer-status" id="pomodoroStatus">25 min focus · 5 min break</p>
+            <p class="timer-status" id="pomodoroStatus"></p>
           </section>
 
           <section class="card subjects-card">
@@ -460,7 +445,6 @@
               <div class="settings-input-group">
                 <input type="number" class="input" id="dailyGoal" min="15" max="720" step="15" value="120">
                 <button class="btn btn--secondary" id="saveGoalBtn">Save Goal</button>
-                <button id="logoutBtn" style="margin-top: 20px;background-color: #ef4444; color: white;padding: 10px 20px; border-radius: 8px;width: 100%;;">Logout</button>
               </div>
             </div>
           </section>
@@ -556,8 +540,7 @@
     </div>
   </div>
 
-<script type="module" src="js/firebase.js?v=4"></script>
-<script type="module" src="js/auth.js?v=4"></script>
+
 <script defer src="js/app.js?v=4"></script>
   
  <!-- Sidebar ko haath se left swipe karne par automatic band karne ka code -->

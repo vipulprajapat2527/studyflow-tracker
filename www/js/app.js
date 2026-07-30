@@ -1,14 +1,3 @@
-
-  // 1. Logout button click hone par kya hoga
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-      logout().then(() => {
-          alert("Logged out successfully!");
-          localStorage.removeItem('userLoggedIn'); // Login state clean karo
-          location.reload(); // Page refresh karke wapas login screen par bhej dega
-      }).catch((error) => {
-          console.error("Logout error: ", error);
-      });
-  });
 // Pure page ke clicks ko handle karne wala master code
 document.addEventListener('click', (e) => {
   // 1. Check karo ki kya sidebar (.nav-item) ya mobile bottom navigation button par click hua hai
@@ -47,8 +36,8 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     if (authScreen) authScreen.style.setProperty('display', 'flex', 'important');
 }
   const STORAGE_KEY = 'studyTrackerData';
-  const POMO_STUDY = 25 * 60;
-  const POMO_BREAK = 5 * 60;
+  const POMO_STUDY = 0;
+  const POMO_BREAK = 0;
   const RING_CIRCUMFERENCE = 2 * Math.PI * 90;
 
   const SUBJECT_COLORS = [
@@ -415,6 +404,8 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     if (target) target.classList.add('view--active');
     $$(`[data-view="${view}"]`).forEach((n) => n.classList.add('active'));
     els.sidebar.classList.remove('open');
+    document.getElementById('sidebarOverlay')?.classList.remove('active');
+document.body.classList.remove('sidebar-open');
   }
 
   function renderGreeting() {
@@ -927,12 +918,12 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
   function setPomodoroButtons() {
     els.pomoStartBtn.disabled = pomoRunning;
     els.pomoPauseBtn.disabled = !pomoRunning;
-    els.pomoSkipBtn.disabled = !pomoRunning && pomoSeconds === (pomoPhase === 'study' ? POMO_STUDY : POMO_BREAK);
+    els.pomoSkipBtn.disabled = !pomoRunning && pomoSeconds === 0;
     els.pomodoroSubject.disabled = pomoRunning;
   }
 
   function completePomodoroStudy() {
-    if (pomoSubjectId) recordSession(pomoSubjectId, POMO_STUDY);
+    if (pomoSubjectId) recordSession(pomoSubjectId, pomoSeconds);
     state.pomodoro.totalSessions++;
     const today = todayStr();
     if (state.pomodoro.todayDate !== today) {
@@ -976,24 +967,9 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     pomoRunning = true;
 
     pomoInterval = setInterval(() => {
-      pomoSeconds--;
+      pomoSeconds++;
       updatePomodoroDisplay();
-      if (pomoSeconds <= 0) {
-        clearInterval(pomoInterval);
-        pomoInterval = null;
-        pomoRunning = false;
-
-        if (pomoPhase === 'study') {
-          completePomodoroStudy();
-          startBreakPhase();
-          startPomodoro();
-        } else {
-          playSound('timer');
-          showToast('Break over! Ready for another session?');
-          startPomodoroPhase();
-          setPomodoroButtons();
-        }
-      }
+      
     }, 1000);
 
     setPomodoroButtons();
@@ -1082,7 +1058,22 @@ if (localStorage.getItem('userLoggedIn') === 'true') {
     els.stopBtn.addEventListener('click', () => stopTimer(true));
     els.pomoStartBtn.addEventListener('click', startPomodoro);
     els.pomoPauseBtn.addEventListener('click', pausePomodoro);
-    els.pomoSkipBtn.addEventListener('click', skipPomodoro);
+    els.pomoSkipBtn.addEventListener('click', () => {
+      // 1. Timer ko roko
+      clearInterval(pomoInterval);
+      pomoInterval = null;
+      pomoRunning = false;
+  
+      // 2. Agar padhai ka time 0 se zyada hai toh session save karo
+      if (pomoSeconds > 0) {
+          completePomodoroStudy();
+      }
+  
+      // 3. Timer reset karke screen update karo
+      pomoSeconds = 0;
+      updatePomodoroDisplay();
+      setPomodoroButtons();
+  });
     els.saveGoalBtn.addEventListener('click', saveGoal);
     els.saveExamBtn.addEventListener('click', saveExam);
     els.soundToggle.addEventListener('change', () => {
@@ -1270,40 +1261,43 @@ function updateWrappedCardData(weeklyTimeText, streakCount, topSubText, userRank
 // --- Auto-Sync Card with Real App Data ---
 function autoSyncCardData() {
   try {
-    if (typeof state === 'undefined' || !state) return;
+      if (typeof state === 'undefined' || !state) return;
 
-    // 1. Real Streak
-    const streak = (state.streak && state.streak.current) ? state.streak.current : 0;
+      // 1. Real Streak
+      const streak = (state.streak && state.streak.current) ? state.streak.current : 0;
 
-    // 2. Real Total Study Time
-    let totalMinutes = 0;
-    if (Array.isArray(state.sessions)) {
-      state.sessions.forEach(session => {
-        const m = session.durationMinutes || session.minutes || Math.floor((session.duration || 0) / 60) || 0;
-        totalMinutes += m;
-      });
-    }
+      // 2. Real Total Study Time
+      let totalSeconds = 0;
+      if (Array.isArray(state.sessions)) {
+          state.sessions.forEach(session => {
+              const sec = session.seconds || session.duration || (session.minutes ? session.minutes * 60 : 0);
+              totalSeconds += sec;
+          });
+      }
 
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-    const timeText = hours > 0 ? (hours + "h " + mins + "m") : (mins + "m");
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const hours = Math.floor(totalMinutes / 60);
+      const mins = totalMinutes % 60;
+      const timeText = hours > 0 ? (hours + "h " + mins + "m") : (mins + "m");
 
-    // 3. Top Subject
-    let topSub = "General";
-    if (Array.isArray(state.subjects) && state.subjects.length > 0) {
-      topSub = state.subjects[0].name || "General";
-    }
+      // 3. Top Subject
+      let topSub = "General";
+      if (Array.isArray(state.subjects) && state.subjects.length > 0) {
+          topSub = state.subjects[0].name || "General";
+      }
 
-    // 4. Rank
-    let rank = "Learner";
-    if (hours >= 50) rank = "Master 👑";
-    else if (hours >= 10) rank = "Warrior ⚔️";
-    else rank = "Beginner 🌱";
+      // 4. Rank Calculation
+      let rank = "Learner";
+      if (hours >= 50) rank = "Master 👑";
+      else if (hours >= 10) rank = "Warrior ⚔️";
+      else rank = "Beginner 🌱";
 
-    // Card me UI update karo
-    updateWrappedCardData(timeText, streak, topSub, rank);
+      // 5. Card UI update karo
+      if (typeof updateWrappedCardData === 'function') {
+          updateWrappedCardData(timeText, streak, topSub, rank);
+      }
   } catch (e) {
-    console.log("Sync error:", e);
+      console.error("autoSyncCardData error:", e);
   }
 }
 
@@ -1549,5 +1543,19 @@ function renderQuickNotes() {
   });
 }
 
-// Page load hote hi render kar do
-setTimeout(renderQuickNotes, 500);
+// Sidebar overlay close logic
+const sidebarOverlayEl = document.getElementById('sidebarOverlay');
+if (sidebarOverlayEl) {
+    const closeSidebarMenu = () => {
+        const sb = document.getElementById('sidebar');
+        if (sb) sb.classList.remove('open', 'active');
+        if (typeof els !== 'undefined' && els.sidebar) {
+            els.sidebar.classList.remove('open', 'active');
+        }
+        sidebarOverlayEl.classList.remove('active');
+        document.body.classList.remove('sidebar-open');
+    };
+
+    sidebarOverlayEl.addEventListener('click', closeSidebarMenu);
+    sidebarOverlayEl.addEventListener('touchstart', closeSidebarMenu);
+}
