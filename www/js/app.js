@@ -1611,3 +1611,355 @@ if (sidebarOverlayEl) {
     sidebarOverlayEl.addEventListener('click', closeSidebarMenu);
     sidebarOverlayEl.addEventListener('touchstart', closeSidebarMenu);
 }
+
+// ===== LIFEFLOW MINI-APP MODULE MANAGERS =====
+
+// --- HABIT TRACKER ---
+let habitData = JSON.parse(localStorage.getItem('lifeflow_habits')) || [
+  { id: 1, name: 'Morning Meditation', frequency: 'daily', streak: 5, completedToday: true },
+  { id: 2, name: 'Read 20 Pages', frequency: 'daily', streak: 3, completedToday: false }
+];
+
+function renderHabits() {
+  const container = document.getElementById('habitsList');
+  const activeEl = document.getElementById('habitActiveCount');
+  const streakEl = document.getElementById('habitBestStreak');
+  const rateEl = document.getElementById('habitTodayRate');
+
+  if (activeEl) activeEl.textContent = habitData.length;
+  const bestStreak = habitData.reduce((max, h) => Math.max(max, h.streak), 0);
+  if (streakEl) streakEl.textContent = `${bestStreak} days`;
+  const completed = habitData.filter(h => h.completedToday).length;
+  const rate = habitData.length ? Math.round((completed / habitData.length) * 100) : 0;
+  if (rateEl) rateEl.textContent = `${rate}%`;
+
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (habitData.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">No habits added yet.</p>';
+    return;
+  }
+
+  habitData.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.style.cssText = 'display:flex; justify-content:space-between; align-items:center; cursor:pointer;';
+    div.onclick = () => toggleHabit(h.id);
+    div.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:1.4rem;">${h.completedToday ? '✅' : '⭕'}</span>
+        <div>
+          <strong style="display:block; color:var(--text);">${h.name}</strong>
+          <small style="color:var(--text-secondary);">${h.frequency} · 🔥 ${h.streak} day streak</small>
+        </div>
+      </div>
+      <button class="btn btn--ghost btn--sm" onclick="event.stopPropagation(); deleteHabit(${h.id});">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function toggleHabit(id) {
+  habitData = habitData.map(h => {
+    if (h.id === id) {
+      const nextState = !h.completedToday;
+      return { ...h, completedToday: nextState, streak: nextState ? h.streak + 1 : Math.max(0, h.streak - 1) };
+    }
+    return h;
+  });
+  localStorage.setItem('lifeflow_habits', JSON.stringify(habitData));
+  renderHabits();
+}
+
+function deleteHabit(id) {
+  habitData = habitData.filter(h => h.id !== id);
+  localStorage.setItem('lifeflow_habits', JSON.stringify(habitData));
+  renderHabits();
+}
+
+document.getElementById('addHabitBtn')?.addEventListener('click', () => {
+  const name = prompt('Enter habit name:');
+  if (name && name.trim()) {
+    habitData.push({ id: Date.now(), name: name.trim(), frequency: 'daily', streak: 0, completedToday: false });
+    localStorage.setItem('lifeflow_habits', JSON.stringify(habitData));
+    renderHabits();
+  }
+});
+
+// --- GOAL TRACKER ---
+let goalData = JSON.parse(localStorage.getItem('lifeflow_goals')) || [
+  { id: 1, title: 'Learn Modern Architecture', targetDate: '2026-12-31', progress: 65 }
+];
+
+function renderGoals() {
+  const container = document.getElementById('goalsList');
+  const activeEl = document.getElementById('goalActiveCount');
+  const completedEl = document.getElementById('goalCompletedCount');
+
+  if (activeEl) activeEl.textContent = goalData.filter(g => g.progress < 100).length;
+  if (completedEl) completedEl.textContent = goalData.filter(g => g.progress >= 100).length;
+
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (goalData.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">No goals added yet.</p>';
+    return;
+  }
+
+  goalData.forEach(g => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.style.cssText = 'display:flex; flex-direction:column; gap:8px;';
+    div.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="color:var(--text);">${g.title}</strong>
+        <small style="color:var(--text-secondary);">${g.progress}%</small>
+      </div>
+      <div style="width:100%; background:var(--border); height:8px; border-radius:4px; overflow:hidden;">
+        <div style="width:${g.progress}%; background:var(--primary); height:100%;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+        <small style="color:var(--text-secondary);">Target: ${g.targetDate || 'No date'}</small>
+        <button class="btn btn--ghost btn--sm" onclick="deleteGoal(${g.id})">🗑️</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function deleteGoal(id) {
+  goalData = goalData.filter(g => g.id !== id);
+  localStorage.setItem('lifeflow_goals', JSON.stringify(goalData));
+  renderGoals();
+}
+
+document.getElementById('addGoalBtn')?.addEventListener('click', () => {
+  const title = prompt('Enter goal title:');
+  if (title && title.trim()) {
+    goalData.push({ id: Date.now(), title: title.trim(), targetDate: '2026-12-31', progress: 10 });
+    localStorage.setItem('lifeflow_goals', JSON.stringify(goalData));
+    renderGoals();
+  }
+});
+
+// --- EXPENSE TRACKER ---
+let expenseData = JSON.parse(localStorage.getItem('lifeflow_expenses')) || [
+  { id: 1, desc: 'Coffee', amount: -4.50, category: 'Food' },
+  { id: 2, desc: 'Freelance Work', amount: 250.00, category: 'Income' }
+];
+
+function renderExpenses() {
+  const container = document.getElementById('expenseList');
+  const incomeEl = document.getElementById('expenseIncomeTotal');
+  const expenseEl = document.getElementById('expenseTotal');
+  const balanceEl = document.getElementById('expenseBalance');
+
+  const income = expenseData.filter(e => e.amount > 0).reduce((sum, e) => sum + e.amount, 0);
+  const expenses = Math.abs(expenseData.filter(e => e.amount < 0).reduce((sum, e) => sum + e.amount, 0));
+  const balance = income - expenses;
+
+  if (incomeEl) incomeEl.textContent = `$${income.toFixed(2)}`;
+  if (expenseEl) expenseEl.textContent = `$${expenses.toFixed(2)}`;
+  if (balanceEl) balanceEl.textContent = `$${balance.toFixed(2)}`;
+
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (expenseData.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">No transactions logged yet.</p>';
+    return;
+  }
+
+  expenseData.forEach(e => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+    const isIncome = e.amount > 0;
+    div.innerHTML = `
+      <div>
+        <strong style="color:var(--text);">${e.desc}</strong>
+        <small style="display:block; color:var(--text-secondary);">${e.category}</small>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-weight:700; color:${isIncome ? 'var(--success)' : 'var(--danger)'};">
+          ${isIncome ? '+' : ''}$${Math.abs(e.amount).toFixed(2)}
+        </span>
+        <button class="btn btn--ghost btn--sm" onclick="deleteExpense(${e.id})">🗑️</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function deleteExpense(id) {
+  expenseData = expenseData.filter(e => e.id !== id);
+  localStorage.setItem('lifeflow_expenses', JSON.stringify(expenseData));
+  renderExpenses();
+}
+
+document.getElementById('addExpenseBtn')?.addEventListener('click', () => {
+  const desc = prompt('Transaction Description:');
+  const amountStr = prompt('Amount (positive for income, negative for expense e.g. -15.50):');
+  if (desc && amountStr && !isNaN(parseFloat(amountStr))) {
+    const amount = parseFloat(amountStr);
+    expenseData.unshift({ id: Date.now(), desc: desc.trim(), amount: amount, category: amount > 0 ? 'Income' : 'General' });
+    localStorage.setItem('lifeflow_expenses', JSON.stringify(expenseData));
+    renderExpenses();
+  }
+});
+
+// --- WORKOUT TRACKER ---
+let workoutData = JSON.parse(localStorage.getItem('lifeflow_workouts')) || [
+  { id: 1, type: 'Pushups', sets: 4, reps: 20, calories: 120 }
+];
+
+function renderWorkouts() {
+  const container = document.getElementById('workoutList');
+  const countEl = document.getElementById('workoutTotalCount');
+  const calEl = document.getElementById('workoutCaloriesTotal');
+
+  if (countEl) countEl.textContent = workoutData.length;
+  const totalCals = workoutData.reduce((sum, w) => sum + (w.calories || 0), 0);
+  if (calEl) calEl.textContent = `${totalCals} kcal`;
+
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (workoutData.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">No workouts logged yet.</p>';
+    return;
+  }
+
+  workoutData.forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+    div.innerHTML = `
+      <div>
+        <strong style="color:var(--text);">${w.type}</strong>
+        <small style="display:block; color:var(--text-secondary);">${w.sets} sets × ${w.reps} reps</small>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-weight:600; color:var(--streak);">${w.calories || 0} kcal</span>
+        <button class="btn btn--ghost btn--sm" onclick="deleteWorkout(${w.id})">🗑️</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function deleteWorkout(id) {
+  workoutData = workoutData.filter(w => w.id !== id);
+  localStorage.setItem('lifeflow_workouts', JSON.stringify(workoutData));
+  renderWorkouts();
+}
+
+document.getElementById('addWorkoutBtn')?.addEventListener('click', () => {
+  const type = prompt('Exercise Name (e.g. Running, Weightlifting):');
+  const repsStr = prompt('Reps / Duration min:');
+  if (type && repsStr && !isNaN(parseInt(repsStr))) {
+    workoutData.unshift({ id: Date.now(), type: type.trim(), sets: 3, reps: parseInt(repsStr), calories: parseInt(repsStr) * 8 });
+    localStorage.setItem('lifeflow_workouts', JSON.stringify(workoutData));
+    renderWorkouts();
+  }
+});
+
+// --- READING TRACKER ---
+let readingData = JSON.parse(localStorage.getItem('lifeflow_reading')) || [
+  { id: 1, title: 'Atomic Habits', author: 'James Clear', readPages: 180, totalPages: 320 }
+];
+
+function renderReading() {
+  const container = document.getElementById('bookshelfList');
+  const countEl = document.getElementById('readingBooksCount');
+  const pagesEl = document.getElementById('readingPagesTotal');
+
+  if (countEl) countEl.textContent = readingData.filter(b => b.readPages >= b.totalPages).length;
+  const totalPages = readingData.reduce((sum, b) => sum + (b.readPages || 0), 0);
+  if (pagesEl) pagesEl.textContent = totalPages;
+
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (readingData.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:1rem;">No books on bookshelf.</p>';
+    return;
+  }
+
+  readingData.forEach(b => {
+    const div = document.createElement('div');
+    div.className = 'stat-card';
+    div.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+    div.innerHTML = `
+      <div>
+        <strong style="color:var(--text);">${b.title}</strong>
+        <small style="display:block; color:var(--text-secondary);">${b.author} · ${b.readPages}/${b.totalPages} pages</small>
+      </div>
+      <button class="btn btn--ghost btn--sm" onclick="deleteBook(${b.id})">🗑️</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function deleteBook(id) {
+  readingData = readingData.filter(b => b.id !== id);
+  localStorage.setItem('lifeflow_reading', JSON.stringify(readingData));
+  renderReading();
+}
+
+document.getElementById('addBookBtn')?.addEventListener('click', () => {
+  const title = prompt('Book Title:');
+  const author = prompt('Author:');
+  if (title && title.trim()) {
+    readingData.push({ id: Date.now(), title: title.trim(), author: author || 'Unknown', readPages: 0, totalPages: 250 });
+    localStorage.setItem('lifeflow_reading', JSON.stringify(readingData));
+    renderReading();
+  }
+});
+
+// --- WATER TRACKER ---
+let waterIntake = parseInt(localStorage.getItem('lifeflow_water_today') || '0', 10);
+const WATER_GOAL = 2500;
+
+function renderWater() {
+  const intakeEl = document.getElementById('waterTodayIntake');
+  const targetEl = document.getElementById('waterTargetDisplay');
+  if (intakeEl) intakeEl.textContent = `${waterIntake} ml`;
+  if (targetEl) targetEl.textContent = `${WATER_GOAL} ml`;
+}
+
+function addWaterIntake(amount) {
+  waterIntake += amount;
+  localStorage.setItem('lifeflow_water_today', waterIntake.toString());
+  renderWater();
+}
+
+// --- STEP TRACKER ---
+let stepCount = parseInt(localStorage.getItem('lifeflow_steps_today') || '0', 10);
+
+function renderSteps() {
+  const stepEl = document.getElementById('stepTodayTotal');
+  const distEl = document.getElementById('stepDistanceTotal');
+  if (stepEl) stepEl.textContent = stepCount.toLocaleString();
+  const km = (stepCount * 0.00075).toFixed(1);
+  if (distEl) distEl.textContent = `${km} km`;
+}
+
+function addStepsCount(amount) {
+  stepCount += amount;
+  localStorage.setItem('lifeflow_steps_today', stepCount.toString());
+  renderSteps();
+}
+
+// Initial renders for all mini-apps
+document.addEventListener('DOMContentLoaded', () => {
+  renderHabits();
+  renderGoals();
+  renderExpenses();
+  renderWorkouts();
+  renderReading();
+  renderWater();
+  renderSteps();
+});

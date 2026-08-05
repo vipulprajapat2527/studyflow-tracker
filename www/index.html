@@ -646,79 +646,389 @@
             </label>
           </section>
         </section>
-        <!-- ===== HABITS VIEW ===== -->
-<section id="view-habits" class="view" data-mode="habit" style="display: none;">
-  <div class="analytics-header">
-      <h2 class="section-title">Habit Tracker</h2>
-      <p class="section-subtitle">Build daily habits & routines</p>
-  </div>
-</section>
+        <!-- ===== HABIT TRACKER MODULE VIEWS ===== -->
+        <section id="view-habits-dashboard" class="view" data-module="habit">
+          <div class="analytics-header">
+            <h2 class="section-title">Habit Tracker</h2>
+            <p class="section-subtitle">Build daily habits, track streaks & routines</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">🔁</div>
+              <div>
+                <p class="stat-card__label">Active Habits</p>
+                <p class="stat-card__value" id="habitActiveCount">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🔥</div>
+              <div>
+                <p class="stat-card__label">Best Streak</p>
+                <p class="stat-card__value" id="habitBestStreak">0 days</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">✅</div>
+              <div>
+                <p class="stat-card__label">Today's Rate</p>
+                <p class="stat-card__value" id="habitTodayRate">0%</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem;">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card__title">Today's Habit Checklist</h3>
+              <button class="btn btn--primary btn--sm" id="addHabitBtn">+ New Habit</button>
+            </div>
+            <div id="habitsList" style="margin-top: 1rem; display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </section>
 
-<!-- ===== GOALS VIEW ===== -->
-<section id="view-goals" class="view" data-mode="goal" style="display: none;">
-  <div class="analytics-header">
-      <h2 class="section-title">Goal Tracker</h2>
-      <p class="section-subtitle">Track your target goals</p>
-  </div>
-</section>
+        <section id="view-habits-analytics" class="view" data-module="habit">
+          <div class="analytics-header">
+            <h2 class="section-title">Habit Consistency & Heatmap</h2>
+            <p class="section-subtitle">365-day habit completion grid</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Annual Habit Heatmap</h3>
+            <div id="habitHeatmap" class="heatmap-grid" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
 
-<!-- ===== STEPS VIEW ===== -->
-<section id="view-steps" class="view" data-mode="step" style="display: none;">
-  <div class="analytics-header">
-      <h2 class="section-title">Step Tracker</h2>
-      <p class="section-subtitle">Daily walk & fitness steps</p>
-  </div>
-</section>
+        <!-- ===== GOAL TRACKER MODULE VIEWS ===== -->
+        <section id="view-goals-dashboard" class="view" data-module="goal">
+          <div class="analytics-header">
+            <h2 class="section-title">Goal Tracker</h2>
+            <p class="section-subtitle">Set, break down, and achieve major milestones</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">🎯</div>
+              <div>
+                <p class="stat-card__label">Active Goals</p>
+                <p class="stat-card__value" id="goalActiveCount">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🏆</div>
+              <div>
+                <p class="stat-card__label">Completed</p>
+                <p class="stat-card__value" id="goalCompletedCount">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem;">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card__title">Your Goals</h3>
+              <button class="btn btn--primary btn--sm" id="addGoalBtn">+ New Goal</button>
+            </div>
+            <div id="goalsList" style="margin-top: 1rem; display:flex; flex-direction:column; gap:12px;"></div>
+          </div>
+        </section>
+
+        <section id="view-goals-analytics" class="view" data-module="goal">
+          <div class="analytics-header">
+            <h2 class="section-title">Goal Progress Reports</h2>
+            <p class="section-subtitle">Milestones and completion statistics</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Completion Breakdown</h3>
+            <div id="goalsProgressList" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
+
+        <!-- ===== EXPENSE TRACKER MODULE VIEWS ===== -->
+        <section id="view-expense-dashboard" class="view" data-module="expense">
+          <div class="analytics-header">
+            <h2 class="section-title">Expense Tracker</h2>
+            <p class="section-subtitle">Log transactions, budget limits & savings offline</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">💵</div>
+              <div>
+                <p class="stat-card__label">Total Income</p>
+                <p class="stat-card__value" id="expenseIncomeTotal">$0.00</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">💸</div>
+              <div>
+                <p class="stat-card__label">Total Expenses</p>
+                <p class="stat-card__value" id="expenseTotal">$0.00</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🏦</div>
+              <div>
+                <p class="stat-card__label">Net Balance</p>
+                <p class="stat-card__value" id="expenseBalance">$0.00</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem;">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card__title">Recent Transactions</h3>
+              <button class="btn btn--primary btn--sm" id="addExpenseBtn">+ Log Entry</button>
+            </div>
+            <div id="expenseList" style="margin-top: 1rem; display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </section>
+
+        <section id="view-expense-analytics" class="view" data-module="expense">
+          <div class="analytics-header">
+            <h2 class="section-title">Budget Reports & Savings</h2>
+            <p class="section-subtitle">Category summaries and savings targets</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Category Breakdown</h3>
+            <div id="expenseCategoryBreakdown" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
+
+        <!-- ===== WORKOUT TRACKER MODULE VIEWS ===== -->
+        <section id="view-workout-dashboard" class="view" data-module="workout">
+          <div class="analytics-header">
+            <h2 class="section-title">Workout Tracker</h2>
+            <p class="section-subtitle">Log exercises, sets, reps & fitness consistency</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">🏋️</div>
+              <div>
+                <p class="stat-card__label">Workouts Logged</p>
+                <p class="stat-card__value" id="workoutTotalCount">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🔥</div>
+              <div>
+                <p class="stat-card__label">Est. Calories Burned</p>
+                <p class="stat-card__value" id="workoutCaloriesTotal">0 kcal</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem;">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card__title">Fitness Logs</h3>
+              <button class="btn btn--primary btn--sm" id="addWorkoutBtn">+ Log Session</button>
+            </div>
+            <div id="workoutList" style="margin-top: 1rem; display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </section>
+
+        <section id="view-workout-analytics" class="view" data-module="workout">
+          <div class="analytics-header">
+            <h2 class="section-title">Fitness Stats & Logs</h2>
+            <p class="section-subtitle">Workout history and calorie burn trends</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Workout Log History</h3>
+            <div id="workoutHistoryList" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
+
+        <!-- ===== READING TRACKER MODULE VIEWS ===== -->
+        <section id="view-reading-dashboard" class="view" data-module="reading">
+          <div class="analytics-header">
+            <h2 class="section-title">Reading Tracker</h2>
+            <p class="section-subtitle">Manage bookshelf, page progress & live reading timer</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">📖</div>
+              <div>
+                <p class="stat-card__label">Books Finished</p>
+                <p class="stat-card__value" id="readingBooksCount">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">📄</div>
+              <div>
+                <p class="stat-card__label">Pages Read</p>
+                <p class="stat-card__value" id="readingPagesTotal">0</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem;">
+            <div class="card__header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 class="card__title">Your Bookshelf</h3>
+              <button class="btn btn--primary btn--sm" id="addBookBtn">+ Add Book</button>
+            </div>
+            <div id="bookshelfList" style="margin-top: 1rem; display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </section>
+
+        <section id="view-reading-analytics" class="view" data-module="reading">
+          <div class="analytics-header">
+            <h2 class="section-title">Reading Stats & Wishlist</h2>
+            <p class="section-subtitle">Track reading velocity and upcoming wishlist</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Reading Progress Summary</h3>
+            <div id="readingProgressSummary" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
+
+        <!-- ===== WATER TRACKER MODULE VIEWS ===== -->
+        <section id="view-water-dashboard" class="view" data-module="water">
+          <div class="analytics-header">
+            <h2 class="section-title">Water Tracker</h2>
+            <p class="section-subtitle">Track daily hydration target & quick logs</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">💧</div>
+              <div>
+                <p class="stat-card__label">Today's Intake</p>
+                <p class="stat-card__value" id="waterTodayIntake">0 ml</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">🎯</div>
+              <div>
+                <p class="stat-card__label">Daily Target</p>
+                <p class="stat-card__value" id="waterTargetDisplay">2500 ml</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem; text-align:center; padding: 2rem 1rem;">
+            <h3 class="card__title" style="margin-bottom:1rem;">Quick Add Water</h3>
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn--secondary" onclick="addWaterIntake(250)">+ 250 ml 🥛</button>
+              <button class="btn btn--secondary" onclick="addWaterIntake(500)">+ 500 ml 🍾</button>
+              <button class="btn btn--secondary" onclick="addWaterIntake(750)">+ 750 ml 💧</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-water-analytics" class="view" data-module="water">
+          <div class="analytics-header">
+            <h2 class="section-title">Hydration Logs</h2>
+            <p class="section-subtitle">Daily intake history</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Intake Log</h3>
+            <div id="waterLogList" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
+
+        <!-- ===== STEP TRACKER MODULE VIEWS ===== -->
+        <section id="view-step-dashboard" class="view" data-module="step">
+          <div class="analytics-header">
+            <h2 class="section-title">Step Tracker</h2>
+            <p class="section-subtitle">Track daily steps, distance & active movement</p>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card__icon">👟</div>
+              <div>
+                <p class="stat-card__label">Today's Steps</p>
+                <p class="stat-card__value" id="stepTodayTotal">0</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon">📏</div>
+              <div>
+                <p class="stat-card__label">Est. Distance</p>
+                <p class="stat-card__value" id="stepDistanceTotal">0.0 km</p>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top: 1rem; text-align:center; padding: 2rem 1rem;">
+            <h3 class="card__title" style="margin-bottom:1rem;">Log Steps Manually</h3>
+            <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn--secondary" onclick="addStepsCount(1000)">+ 1,000 Steps</button>
+              <button class="btn btn--secondary" onclick="addStepsCount(2500)">+ 2,500 Steps</button>
+              <button class="btn btn--secondary" onclick="addStepsCount(5000)">+ 5,000 Steps</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-step-analytics" class="view" data-module="step">
+          <div class="analytics-header">
+            <h2 class="section-title">Activity Reports</h2>
+            <p class="section-subtitle">Weekly & monthly step summaries</p>
+          </div>
+          <div class="card">
+            <h3 class="card__title">Step Log History</h3>
+            <div id="stepLogList" style="margin-top: 1rem;"></div>
+          </div>
+        </section>
       </main>
 
       <footer class="footer">
-        <p>StudyFlow · All data saved locally in your browser</p>
+        <p>LifeFlow · One App. Every Goal.</p>
       </footer>
     </div>
 
     <nav class="mobile-nav" id="mobileNav">
-      <!-- Study Mode Buttons -->
-      <button class="mobile-nav__item study-only active" data-mode="study" data-view="dashboard">
+      <!-- Study Module -->
+      <button class="mobile-nav__item nav-item active" data-module="study" data-view="dashboard">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
           <span>Home</span>
       </button>
-      <button class="mobile-nav__item study-only" data-mode="study" data-view="study">
+      <button class="mobile-nav__item nav-item" data-module="study" data-view="study">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
           <span>Study</span>
       </button>
-      <button class="mobile-nav__item study-only" data-mode="study" data-view="analytics">
+      <button class="mobile-nav__item nav-item" data-module="study" data-view="analytics">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           <span>Stats</span>
       </button>
-      <button class="mobile-nav__item study-only" data-mode="study" data-view="achievements">
+      <button class="mobile-nav__item nav-item" data-module="study" data-view="achievements">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
           <span>Badges</span>
       </button>
-  
-      <!-- Habit Mode Button -->
-      <button class="mobile-nav__item" data-mode="habit" data-view="habits" style="display: none;">
+
+      <!-- Habit Module -->
+      <button class="mobile-nav__item nav-item" data-module="habit" data-view="habits-dashboard">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
           <span>Habits</span>
       </button>
-  
-      <!-- Goal Mode Button -->
-      <button class="mobile-nav__item" data-mode="goal" data-view="goals" style="display: none;">
+
+      <!-- Goal Module -->
+      <button class="mobile-nav__item nav-item" data-module="goal" data-view="goals-dashboard">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
           <span>Goals</span>
       </button>
-  
-      <!-- Step Mode Button -->
-      <button class="mobile-nav__item" data-mode="step" data-view="steps" style="display: none;">
+
+      <!-- Expense Module -->
+      <button class="mobile-nav__item nav-item" data-module="expense" data-view="expense-dashboard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span>Expenses</span>
+      </button>
+
+      <!-- Workout Module -->
+      <button class="mobile-nav__item nav-item" data-module="workout" data-view="workout-dashboard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v14M18 5v14M2 9h4M18 9h4M2 15h4M18 15h4"/></svg>
+          <span>Workout</span>
+      </button>
+
+      <!-- Reading Module -->
+      <button class="mobile-nav__item nav-item" data-module="reading" data-view="reading-dashboard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Books</span>
+      </button>
+
+      <!-- Water Module -->
+      <button class="mobile-nav__item nav-item" data-module="water" data-view="water-dashboard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+          <span>Water</span>
+      </button>
+
+      <!-- Step Module -->
+      <button class="mobile-nav__item nav-item" data-module="step" data-view="step-dashboard">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
           <span>Steps</span>
       </button>
-  
+
       <!-- Common Settings Button -->
-      <button class="mobile-nav__item" data-view="settings">
+      <button class="mobile-nav__item nav-item" data-module="all" data-view="settings">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
           <span>Settings</span>
       </button>
-  </nav>
+    </nav>
 
   <!-- Add Subject Modal -->
   <div class="modal-overlay" id="subjectModal" hidden>
@@ -791,14 +1101,8 @@
         let startX = 0;
         let startY = 0;
     
-        // Niche ke tabs ko target karne ke liye buttons/links ki classes (Home, Study, Stats etc.)
-        const tabButtons = Array.from(document.querySelectorAll('.nav-tabs a, .bottom-nav a, [class*="nav"] a, [class*="nav"] button, footer button'));
-    
-        if (tabButtons.length === 0) return;
-    
         window.addEventListener('touchstart', (e) => {
-            // Agar sidebar khula hai toh tab swipe band rahega
-            if (document.querySelector('.sidebar.active') || document.querySelector('[class*="sidebar"].active')) return;
+            if (document.querySelector('.sidebar.open') || document.querySelector('.sidebar.active')) return;
             startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
         }, { passive: true });
@@ -810,28 +1114,21 @@
             let diffX = startX - endX;
             let diffY = startY - endY;
     
-            // Check karega ki perfect left/right swipe hua hai ya nahi
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
-                
-                // Pata lagao current page index kaun sa hai (kaun sa icon active hai)
-                let currentIndex = tabButtons.findIndex(btn => 
-                    btn.classList.contains('active') || 
-                    btn.parentElement.classList.contains('active')
-                );
-    
+                const activeMod = document.body.getAttribute('data-active-module') || 'study';
+                const moduleButtons = Array.from(document.querySelectorAll(`.sidebar .nav-item[data-module="${activeMod}"]`));
+                if (moduleButtons.length <= 1) return;
+
+                let currentIndex = moduleButtons.findIndex(btn => btn.classList.contains('active'));
                 if (currentIndex === -1) currentIndex = 0;
-    
-                // LEFT SWIPE -> Instagram style agla page button click karega
-                if (diffX > 60 && currentIndex < tabButtons.length - 1) {
-                    if (tabButtons[currentIndex + 1]) {
-                        tabButtons[currentIndex + 1].click();
-                    }
+
+                // LEFT SWIPE -> Next page in active module
+                if (diffX > 60 && currentIndex < moduleButtons.length - 1) {
+                    moduleButtons[currentIndex + 1].click();
                 } 
-                // RIGHT SWIPE -> Pichla page button click karega
+                // RIGHT SWIPE -> Previous page in active module
                 else if (diffX < -60 && currentIndex > 0) {
-                    if (tabButtons[currentIndex - 1]) {
-                        tabButtons[currentIndex - 1].click();
-                    }
+                    moduleButtons[currentIndex - 1].click();
                 }
             }
         }, { passive: true });
