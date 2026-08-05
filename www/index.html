@@ -23,59 +23,111 @@
       <div class="sidebar__brand">
         <div class="sidebar__logo">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
           </svg>
         </div>
         <div>
-          <span class="sidebar__name">StudyFlow</span>
-          <span class="sidebar__tagline">Focus. Track. Excel.</span>
+          <span class="sidebar__name">LifeFlow</span>
+          <span class="sidebar__tagline">One App. Every Goal.</span>
         </div>
       </div>
       <nav class="sidebar__nav">
-        <!-- Study Mode Buttons -->
-        <button class="nav-item study-only" data-mode="study" data-view="dashboard">
-            <span class="nav-icon">📁</span>
+        <!-- Study Module Navigation -->
+        <button class="nav-item active" data-module="study" data-view="dashboard">
+            <span class="nav-icon">📊</span>
             <span class="nav-label">Dashboard</span>
         </button>
-        <button class="nav-item study-only" data-mode="study" data-view="study">
+        <button class="nav-item" data-module="study" data-view="study">
             <span class="nav-icon">⏱️</span>
             <span class="nav-label">Study Session</span>
         </button>
-        <button class="nav-item study-only" data-mode="study" data-view="analytics">
-            <span class="nav-icon">📊</span>
+        <button class="nav-item" data-module="study" data-view="analytics">
+            <span class="nav-icon">📈</span>
             <span class="nav-label">Analytics</span>
         </button>
-        <button class="nav-item study-only" data-mode="study" data-view="achievements">
+        <button class="nav-item" data-module="study" data-view="achievements">
             <span class="nav-icon">🏅</span>
             <span class="nav-label">Badges</span>
         </button>
-    
-        <!-- Habit Mode Button -->
-        <button class="nav-item" data-mode="habit" data-view="habits" style="display: none;">
+
+        <!-- Habit Module Navigation -->
+        <button class="nav-item" data-module="habit" data-view="habits-dashboard">
             <span class="nav-icon">🔁</span>
             <span class="nav-label">Habits</span>
         </button>
-    
-        <!-- Goal Mode Button -->
-        <button class="nav-item" data-mode="goal" data-view="goals" style="display: none;">
+        <button class="nav-item" data-module="habit" data-view="habits-analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Habit Stats</span>
+        </button>
+
+        <!-- Goal Module Navigation -->
+        <button class="nav-item" data-module="goal" data-view="goals-dashboard">
             <span class="nav-icon">🎯</span>
             <span class="nav-label">Goals</span>
         </button>
-    
-        <!-- Step Mode Button -->
-        <button class="nav-item" data-mode="step" data-view="steps" style="display: none;">
+        <button class="nav-item" data-module="goal" data-view="goals-analytics">
+            <span class="nav-icon">📈</span>
+            <span class="nav-label">Goal Progress</span>
+        </button>
+
+        <!-- Expense Module Navigation -->
+        <button class="nav-item" data-module="expense" data-view="expense-dashboard">
+            <span class="nav-icon">💳</span>
+            <span class="nav-label">Expenses</span>
+        </button>
+        <button class="nav-item" data-module="expense" data-view="expense-analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Budget Reports</span>
+        </button>
+
+        <!-- Workout Module Navigation -->
+        <button class="nav-item" data-module="workout" data-view="workout-dashboard">
+            <span class="nav-icon">🏋️</span>
+            <span class="nav-label">Workouts</span>
+        </button>
+        <button class="nav-item" data-module="workout" data-view="workout-analytics">
+            <span class="nav-icon">📈</span>
+            <span class="nav-label">Fitness Log</span>
+        </button>
+
+        <!-- Reading Module Navigation -->
+        <button class="nav-item" data-module="reading" data-view="reading-dashboard">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">Bookshelf</span>
+        </button>
+        <button class="nav-item" data-module="reading" data-view="reading-analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Reading Stats</span>
+        </button>
+
+        <!-- Water Module Navigation -->
+        <button class="nav-item" data-module="water" data-view="water-dashboard">
+            <span class="nav-icon">💧</span>
+            <span class="nav-label">Hydration</span>
+        </button>
+        <button class="nav-item" data-module="water" data-view="water-analytics">
+            <span class="nav-icon">📈</span>
+            <span class="nav-label">Water Log</span>
+        </button>
+
+        <!-- Step Module Navigation -->
+        <button class="nav-item" data-module="step" data-view="step-dashboard">
             <span class="nav-icon">👟</span>
-            <span class="nav-label">Steps</span>
+            <span class="nav-label">Step Counter</span>
+        </button>
+        <button class="nav-item" data-module="step" data-view="step-analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Activity Stats</span>
         </button>
     
-        <!-- Settings Button (Har mode me dikhega) -->
-        <button class="nav-item" data-view="settings">
+        <!-- Settings Button (Visible in all modules) -->
+        <button class="nav-item" data-module="all" data-view="settings">
             <span class="nav-icon">⚙️</span>
             <span class="nav-label">Settings</span>
         </button>
-    </nav>
+      </nav>
     
         
 
@@ -109,7 +161,7 @@
       <main class="main">
         <!-- ===== DASHBOARD VIEW ===== -->
          
-        <section class="view view--active" id="view-dashboard" data-mode="study">Home</button>
+        <section class="view view--active" id="view-dashboard" data-module="study">
           <div class="hero animate-in">
             <div class="hero__content">
               <div class="hero__quote">
@@ -198,7 +250,7 @@
         </section>
 
         <!-- ===== STUDY VIEW ===== -->
-        <section class="view" id="view-study" data-mode="study">Study</button>
+        <section class="view" id="view-study" data-module="study">
           <div class="timer-tabs">
             <button class="timer-tab active" data-timer="free">Free Timer</button>
             <button class="timer-tab" data-timer="pomodoro">Pomodoro</button>
@@ -336,7 +388,7 @@
         </section>
 
         <!-- ===== ANALYTICS VIEW ===== -->
-        <section class="view" id="view-analytics" data-mode="study">Analytics</button>
+        <section class="view" id="view-analytics" data-module="study">
           <div class="analytics-header">
             <h2 class="section-title">Study Analytics</h2>
             <p class="section-subtitle">Track your progress and find patterns</p>
@@ -445,7 +497,7 @@
         </section>
 
         <!-- ===== ACHIEVEMENTS VIEW ===== -->
-        <section class="view" id="view-achievements" data-mode="study">Achievements</button>
+        <section class="view" id="view-achievements" data-module="study">
           <div class="analytics-header">
             <h2 class="section-title">Achievements</h2>
             <p class="section-subtitle"><span id="badgeCount">0</span> of <span id="badgeTotal">8</span> unlocked</p>
@@ -455,38 +507,111 @@
         </section>
 
         <!-- ===== SETTINGS VIEW ===== -->
-        <section id="view-settings" class="view" >Setting</button>
-          
-      <div class="analytics-header">
+        <section id="view-settings" class="view" data-module="all">
+          <div class="analytics-header">
             <h2 class="section-title">Settings</h2>
-            <p class="section-subtitle">Customize your study experience</p>
+            <p class="section-subtitle">Customize LifeFlow systems, themes, and preferences</p>
           </div>
-          <!-- Mode Switcher (Settings Page) -->
-<div class="card" data-mode="all" style="margin-top: 1rem; padding: 1.5rem;">
-  <h3 style="margin-bottom: 0.5rem;">Choose App Mode</h3>
-  <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Select workspace to switch sidebar and navigation:</p>
-  
-  <div class="mode-switcher-options" style="display: flex; gap: 10px; flex-wrap: wrap;">
-      <button class="mode-tab active" data-app-mode="study" onclick="switchAppMode('study')">
-          <span class="tab-icon">📚</span>
-          <span class="tab-label">Study Tracker</span>
-      </button>
-      <button class="mode-tab" data-app-mode="habit" onclick="switchAppMode('habit')">
-          <span class="tab-icon">🔁</span>
-          <span class="tab-label">Habit Tracker</span>
-      </button>
-      <button class="mode-tab" data-app-mode="goal" onclick="switchAppMode('goal')">
-          <span class="tab-icon">🎯</span>
-          <span class="tab-label">Goal Tracker</span>
-      </button>
-      <button class="mode-tab" data-app-mode="step" onclick="switchAppMode('step')">
-          <span class="tab-icon">👟</span>
-          <span class="tab-label">Step Tracker</span>
-      </button>
-  </div>
-</div>
 
-          <section class="card" data-mode="study">Study</button>
+          <!-- Productivity System Switcher (Settings Page Only) -->
+          <div class="card" data-module="all" style="margin-top: 1rem; padding: 1.5rem;">
+            <h3 style="margin-bottom: 0.25rem;">Switch Productivity System</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Select a system to switch active workspace and navigation:</p>
+            
+            <div class="system-switcher-grid" id="systemSwitcherGrid">
+              <div class="system-card active" data-app-module="study">
+                <span class="system-card__icon">📚</span>
+                <span class="system-card__title">Study Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="habit">
+                <span class="system-card__icon">🔁</span>
+                <span class="system-card__title">Habit Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="goal">
+                <span class="system-card__icon">🎯</span>
+                <span class="system-card__title">Goal Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="expense">
+                <span class="system-card__icon">💳</span>
+                <span class="system-card__title">Expense Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="workout">
+                <span class="system-card__icon">🏋️</span>
+                <span class="system-card__title">Workout Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="reading">
+                <span class="system-card__icon">📖</span>
+                <span class="system-card__title">Reading Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="water">
+                <span class="system-card__icon">💧</span>
+                <span class="system-card__title">Water Tracker</span>
+              </div>
+              <div class="system-card" data-app-module="step">
+                <span class="system-card__icon">👟</span>
+                <span class="system-card__title">Step Tracker</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 12 Color Themes Picker -->
+          <div class="card" data-module="all" style="margin-top: 1rem; padding: 1.5rem;">
+            <h3 style="margin-bottom: 0.25rem;">App Themes (12 Modern Styles)</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Choose your favorite accent color palette:</p>
+
+            <div class="theme-picker-grid" id="themePickerGrid">
+              <div class="theme-swatch active" data-theme-name="purple">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"></div>
+                <span class="theme-swatch__label">Purple</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="ocean-blue">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #0284c7, #06b6d4);"></div>
+                <span class="theme-swatch__label">Ocean</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="mint">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #10b981, #14b8a6);"></div>
+                <span class="theme-swatch__label">Mint</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="sunset">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #f97316, #ef4444);"></div>
+                <span class="theme-swatch__label">Sunset</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="midnight">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #3730a3, #6366f1);"></div>
+                <span class="theme-swatch__label">Midnight</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="forest">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #047857, #10b981);"></div>
+                <span class="theme-swatch__label">Forest</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="rose">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #e11d48, #f43f5e);"></div>
+                <span class="theme-swatch__label">Rose</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="amber">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #d97706, #f59e0b);"></div>
+                <span class="theme-swatch__label">Amber</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="cyber">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #7c3aed, #d946ef);"></div>
+                <span class="theme-swatch__label">Cyber</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="slate">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #334155, #64748b);"></div>
+                <span class="theme-swatch__label">Slate</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="emerald">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #065f46, #059669);"></div>
+                <span class="theme-swatch__label">Emerald</span>
+              </div>
+              <div class="theme-swatch" data-theme-name="minimal-white">
+                <div class="theme-swatch__circle" style="background: linear-gradient(135deg, #18181b, #52525b);"></div>
+                <span class="theme-swatch__label">Minimal</span>
+              </div>
+            </div>
+          </div>
+
+          <section class="card" data-module="study">
             <h2 class="card__title">Daily Goal</h2>
             <div class="settings-row">
               <label class="settings-label" for="dailyGoal">Study goal (minutes)</label>
@@ -497,7 +622,7 @@
             </div>
           </section>
 
-          <section class="card" data-mode="study">Study</button>
+          <section class="card" data-module="study">
             <h2 class="card__title">Exam Countdown</h2>
             <div class="settings-row">
               <label class="settings-label" for="examName">Exam name</label>
@@ -512,7 +637,7 @@
             </div>
           </section>
 
-          <section class="card" data-mode="study">Study</button>
+          <section class="card" data-module="study">
             <h2 class="card__title">Notifications</h2>
             <label class="toggle-row">
               <span class="toggle-row__label">Sound when timer ends</span>

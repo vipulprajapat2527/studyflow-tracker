@@ -1,113 +1,109 @@
-// ===== 1. PAGE LOAD HOTE HI ACTIVE MODE APPLY KARO =====
+// ===== LIFEFLOW CORE MODULE ROUTER & THEME ENGINE =====
+const MODULE_CONFIG = {
+  study: { name: 'Study Tracker', icon: '📚', defaultView: 'dashboard' },
+  habit: { name: 'Habit Tracker', icon: '🔁', defaultView: 'habits-dashboard' },
+  goal: { name: 'Goal Tracker', icon: '🎯', defaultView: 'goals-dashboard' },
+  expense: { name: 'Expense Tracker', icon: '💳', defaultView: 'expense-dashboard' },
+  workout: { name: 'Workout Tracker', icon: '🏋️', defaultView: 'workout-dashboard' },
+  reading: { name: 'Reading Tracker', icon: '📖', defaultView: 'reading-dashboard' },
+  water: { name: 'Water Tracker', icon: '💧', defaultView: 'water-dashboard' },
+  step: { name: 'Step Tracker', icon: '👟', defaultView: 'step-dashboard' },
+};
+
+let currentAppModule = localStorage.getItem('lifeflow_active_module') || 'study';
+let currentAppTheme = localStorage.getItem('lifeflow_theme') || 'purple';
+
 document.addEventListener('DOMContentLoaded', () => {
-  const savedMode = localStorage.getItem('selectedAppMode') || 'study';
-  switchAppMode(savedMode);
+  switchLifeFlowModule(currentAppModule);
+  applyLifeFlowTheme(currentAppTheme);
+
+  // System Switcher click listener
+  document.getElementById('systemSwitcherGrid')?.addEventListener('click', (e) => {
+    const card = e.target.closest('.system-card');
+    if (card) {
+      const moduleKey = card.getAttribute('data-app-module');
+      if (moduleKey) switchLifeFlowModule(moduleKey);
+    }
+  });
+
+  // Theme Picker click listener
+  document.getElementById('themePickerGrid')?.addEventListener('click', (e) => {
+    const swatch = e.target.closest('.theme-swatch');
+    if (swatch) {
+      const themeName = swatch.getAttribute('data-theme-name');
+      if (themeName) applyLifeFlowTheme(themeName);
+    }
+  });
 });
 
-// ===== 2. WORKSPACE / MODE SWITCHING SYSTEM =====
-function switchAppMode(mode) {
-  if (!mode) mode = 'study';
-  localStorage.setItem('selectedAppMode', mode);
+function switchLifeFlowModule(moduleKey) {
+  if (!MODULE_CONFIG[moduleKey]) moduleKey = 'study';
+  currentAppModule = moduleKey;
+  localStorage.setItem('lifeflow_active_module', moduleKey);
 
-  // Body par mode tag set karo
-  document.body.setAttribute('data-app-mode', mode);
+  // Update body tag for CSS module isolation rules
+  document.body.setAttribute('data-active-module', moduleKey);
 
-  // A. Sidebar & Bottom Nav Buttons Filter
-  document.querySelectorAll('.nav-item, [data-view]').forEach(btn => {
-      const btnMode = btn.getAttribute('data-mode');
-      if (!btnMode || btnMode === 'all' || btnMode === mode) {
-          btn.style.setProperty('display', 'flex', 'important');
-      } else {
-          btn.style.setProperty('display', 'none', 'important');
-      }
+  // Update Settings system cards UI
+  document.querySelectorAll('.system-card').forEach(card => {
+    if (card.getAttribute('data-app-module') === moduleKey) {
+      card.classList.add('active');
+    } else {
+      card.classList.remove('active');
+    }
   });
 
-  // B. Settings Cards Filter
-  document.querySelectorAll('#view-settings .card').forEach(card => {
-      const cardMode = card.getAttribute('data-mode');
-      if (!cardMode || cardMode === 'all' || cardMode === mode) {
-          card.style.display = 'block';
-      } else {
-          card.style.display = 'none';
-      }
-  });
-
-  // C. Default Page Open per Mode
-  let defaultView = 'dashboard';
-  if (mode === 'habit') defaultView = 'habits';
-  if (mode === 'goal') defaultView = 'goals';
-  if (mode === 'step') defaultView = 'steps';
-
-  openView(defaultView);
+  // Open default view for the selected module
+  const targetView = MODULE_CONFIG[moduleKey].defaultView;
+  openView(targetView);
 }
 
-// ===== 3. SAFE VIEW OPENER (Mixing Rokne Ke Liye) =====
+function applyLifeFlowTheme(themeName) {
+  currentAppTheme = themeName || 'purple';
+  localStorage.setItem('lifeflow_theme', currentAppTheme);
+  document.body.setAttribute('data-color-theme', currentAppTheme);
+
+  // Update theme swatch active state
+  document.querySelectorAll('.theme-swatch').forEach(swatch => {
+    if (swatch.getAttribute('data-theme-name') === currentAppTheme) {
+      swatch.classList.add('active');
+    } else {
+      swatch.classList.remove('active');
+    }
+  });
+}
+
 function openView(viewName) {
-  // Pehle saare views hide karo
+  if (!viewName) return;
+
+  // Deactivate all views
   document.querySelectorAll('.view').forEach(v => {
-      v.style.display = 'none';
-      v.classList.remove('active');
+    v.style.display = 'none';
+    v.classList.remove('active');
   });
 
-  // Target view ko open karo
+  // Deactivate all nav items
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+  // Target view
   const target = document.getElementById('view-' + viewName);
   if (target) {
-      target.style.display = 'block';
-      target.classList.add('active');
+    target.style.display = 'block';
+    target.classList.add('active');
   }
+
+  // Highlight active nav item matching viewName
+  document.querySelectorAll(`.nav-item[data-view="${viewName}"]`).forEach(btn => {
+    btn.classList.add('active');
+  });
 }
 
-// ===== 4. CLICK HANDLER =====
+// Global Nav & View Click Handler
 document.addEventListener('click', (e) => {
-  const navBtn = e.target.closest('.nav-item') || e.target.closest('[data-view]');
-  if (navBtn) {
-      const view = navBtn.getAttribute('data-view');
-      if (view) {
-          openView(view);
-          if (view === 'settings') {
-              const currentMode = localStorage.getItem('selectedAppMode') || 'study';
-              switchAppMode(currentMode); // Settings me card re-filter
-          }
-      }
-  }
-});// Pure page ke clicks ko handle karne wala master code
-document.addEventListener('click', (e) => {
-  // 1. Check karo ki kya sidebar (.nav-item) ya mobile bottom navigation button par click hua hai
-  const navButton = e.target.closest('.nav-item') || e.target.closest('[data-view]');
-
+  const navButton = e.target.closest('.nav-item');
   if (navButton) {
-      const view = navButton.getAttribute('data-view');
-      if (view) {
-          console.log("Mila target view:", view);
-
-          // Saare nav buttons se active class hatao
-          document.querySelectorAll('.nav-item, [data-view]').forEach(btn => btn.classList.remove('active'));
-          navButton.classList.add('active');
-
-          // Saare sections ko chhupao
-          document.querySelectorAll('.view, .view-section').forEach(sec => {
-              sec.style.display = 'none';
-          });
-
-          // Target section ko dikhao
-          const targetSection = document.getElementById('view-' + view);
-          if (targetSection) {
-              targetSection.style.display = 'block';
-          }
-
-          // ===== FIX: SETTINGS PAGE KE CARDS FILTER (Active Mode Ke Hisaab Se) =====
-          if (view === 'settings') {
-              const currentMode = localStorage.getItem('selectedAppMode') || 'study';
-              document.querySelectorAll('#view-settings .card').forEach(card => {
-                  const cardMode = card.getAttribute('data-mode');
-                  if (!cardMode || cardMode === 'all' || cardMode === currentMode) {
-                      card.style.display = 'block';
-                  } else {
-                      card.style.display = 'none';
-                  }
-              });
-          }
-      }
+    const view = navButton.getAttribute('data-view');
+    if (view) openView(view);
   }
 });
 
