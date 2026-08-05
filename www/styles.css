@@ -275,6 +275,7 @@ button, input, select { font-family: inherit; }
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  
 }
 
 .view {

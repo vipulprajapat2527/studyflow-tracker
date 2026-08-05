@@ -33,29 +33,51 @@
           <span class="sidebar__tagline">Focus. Track. Excel.</span>
         </div>
       </div>
-
       <nav class="sidebar__nav">
-        <button class="nav-item active" data-view="dashboard" id="dashboardBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Dashboard
+        <!-- Study Mode Buttons -->
+        <button class="nav-item study-only" data-mode="study" data-view="dashboard">
+            <span class="nav-icon">📁</span>
+            <span class="nav-label">Dashboard</span>
         </button>
-        <button class="nav-item" data-view="study" id="studyBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Study
+        <button class="nav-item study-only" data-mode="study" data-view="study">
+            <span class="nav-icon">⏱️</span>
+            <span class="nav-label">Study Session</span>
         </button>
-        <button class="nav-item" data-view="analytics" id="analyticsBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          Analytics
+        <button class="nav-item study-only" data-mode="study" data-view="analytics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Analytics</span>
         </button>
-        <button class="nav-item" data-view="achievements" id="achievementsBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          Achievements
+        <button class="nav-item study-only" data-mode="study" data-view="achievements">
+            <span class="nav-icon">🏅</span>
+            <span class="nav-label">Badges</span>
         </button>
-        <button class="nav-item" data-view="settings" id="settingsBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Settings
+    
+        <!-- Habit Mode Button -->
+        <button class="nav-item" data-mode="habit" data-view="habits" style="display: none;">
+            <span class="nav-icon">🔁</span>
+            <span class="nav-label">Habits</span>
         </button>
-      </nav>
+    
+        <!-- Goal Mode Button -->
+        <button class="nav-item" data-mode="goal" data-view="goals" style="display: none;">
+            <span class="nav-icon">🎯</span>
+            <span class="nav-label">Goals</span>
+        </button>
+    
+        <!-- Step Mode Button -->
+        <button class="nav-item" data-mode="step" data-view="steps" style="display: none;">
+            <span class="nav-icon">👟</span>
+            <span class="nav-label">Steps</span>
+        </button>
+    
+        <!-- Settings Button (Har mode me dikhega) -->
+        <button class="nav-item" data-view="settings">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Settings</span>
+        </button>
+    </nav>
+    
+        
 
       <div class="sidebar__rank" id="sidebarRank">
         <div class="rank-badge rank-badge--beginner" id="rankBadge">
@@ -86,7 +108,8 @@
 
       <main class="main">
         <!-- ===== DASHBOARD VIEW ===== -->
-        <section class="view view--active" id="view-dashboard">
+         
+        <section class="view view--active" id="view-dashboard" data-mode="study">Home</button>
           <div class="hero animate-in">
             <div class="hero__content">
               <div class="hero__quote">
@@ -175,7 +198,7 @@
         </section>
 
         <!-- ===== STUDY VIEW ===== -->
-        <section class="view" id="view-study">
+        <section class="view" id="view-study" data-mode="study">Study</button>
           <div class="timer-tabs">
             <button class="timer-tab active" data-timer="free">Free Timer</button>
             <button class="timer-tab" data-timer="pomodoro">Pomodoro</button>
@@ -313,7 +336,7 @@
         </section>
 
         <!-- ===== ANALYTICS VIEW ===== -->
-        <section class="view" id="view-analytics">
+        <section class="view" id="view-analytics" data-mode="study">Analytics</button>
           <div class="analytics-header">
             <h2 class="section-title">Study Analytics</h2>
             <p class="section-subtitle">Track your progress and find patterns</p>
@@ -422,7 +445,7 @@
         </section>
 
         <!-- ===== ACHIEVEMENTS VIEW ===== -->
-        <section class="view" id="view-achievements">
+        <section class="view" id="view-achievements" data-mode="study">Achievements</button>
           <div class="analytics-header">
             <h2 class="section-title">Achievements</h2>
             <p class="section-subtitle"><span id="badgeCount">0</span> of <span id="badgeTotal">8</span> unlocked</p>
@@ -432,13 +455,38 @@
         </section>
 
         <!-- ===== SETTINGS VIEW ===== -->
-        <section class="view" id="view-settings">
-          <div class="analytics-header">
+        <section id="view-settings" class="view" >Setting</button>
+          
+      <div class="analytics-header">
             <h2 class="section-title">Settings</h2>
             <p class="section-subtitle">Customize your study experience</p>
           </div>
+          <!-- Mode Switcher (Settings Page) -->
+<div class="card" data-mode="all" style="margin-top: 1rem; padding: 1.5rem;">
+  <h3 style="margin-bottom: 0.5rem;">Choose App Mode</h3>
+  <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Select workspace to switch sidebar and navigation:</p>
+  
+  <div class="mode-switcher-options" style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="mode-tab active" data-app-mode="study" onclick="switchAppMode('study')">
+          <span class="tab-icon">📚</span>
+          <span class="tab-label">Study Tracker</span>
+      </button>
+      <button class="mode-tab" data-app-mode="habit" onclick="switchAppMode('habit')">
+          <span class="tab-icon">🔁</span>
+          <span class="tab-label">Habit Tracker</span>
+      </button>
+      <button class="mode-tab" data-app-mode="goal" onclick="switchAppMode('goal')">
+          <span class="tab-icon">🎯</span>
+          <span class="tab-label">Goal Tracker</span>
+      </button>
+      <button class="mode-tab" data-app-mode="step" onclick="switchAppMode('step')">
+          <span class="tab-icon">👟</span>
+          <span class="tab-label">Step Tracker</span>
+      </button>
+  </div>
+</div>
 
-          <section class="card">
+          <section class="card" data-mode="study">Study</button>
             <h2 class="card__title">Daily Goal</h2>
             <div class="settings-row">
               <label class="settings-label" for="dailyGoal">Study goal (minutes)</label>
@@ -449,7 +497,7 @@
             </div>
           </section>
 
-          <section class="card">
+          <section class="card" data-mode="study">Study</button>
             <h2 class="card__title">Exam Countdown</h2>
             <div class="settings-row">
               <label class="settings-label" for="examName">Exam name</label>
@@ -464,7 +512,7 @@
             </div>
           </section>
 
-          <section class="card">
+          <section class="card" data-mode="study">Study</button>
             <h2 class="card__title">Notifications</h2>
             <label class="toggle-row">
               <span class="toggle-row__label">Sound when timer ends</span>
@@ -473,6 +521,29 @@
             </label>
           </section>
         </section>
+        <!-- ===== HABITS VIEW ===== -->
+<section id="view-habits" class="view" data-mode="habit" style="display: none;">
+  <div class="analytics-header">
+      <h2 class="section-title">Habit Tracker</h2>
+      <p class="section-subtitle">Build daily habits & routines</p>
+  </div>
+</section>
+
+<!-- ===== GOALS VIEW ===== -->
+<section id="view-goals" class="view" data-mode="goal" style="display: none;">
+  <div class="analytics-header">
+      <h2 class="section-title">Goal Tracker</h2>
+      <p class="section-subtitle">Track your target goals</p>
+  </div>
+</section>
+
+<!-- ===== STEPS VIEW ===== -->
+<section id="view-steps" class="view" data-mode="step" style="display: none;">
+  <div class="analytics-header">
+      <h2 class="section-title">Step Tracker</h2>
+      <p class="section-subtitle">Daily walk & fitness steps</p>
+  </div>
+</section>
       </main>
 
       <footer class="footer">
@@ -480,30 +551,49 @@
       </footer>
     </div>
 
-    <!-- Mobile Bottom Nav -->
     <nav class="mobile-nav" id="mobileNav">
-      <button class="mobile-nav__item active" data-view="dashboard">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        <span>Home</span>
+      <!-- Study Mode Buttons -->
+      <button class="mobile-nav__item study-only active" data-mode="study" data-view="dashboard">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>Home</span>
       </button>
-      <button class="mobile-nav__item" data-view="study">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Study</span>
+      <button class="mobile-nav__item study-only" data-mode="study" data-view="study">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>Study</span>
       </button>
-      <button class="mobile-nav__item" data-view="analytics">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        <span>Stats</span>
+      <button class="mobile-nav__item study-only" data-mode="study" data-view="analytics">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <span>Stats</span>
       </button>
-      <button class="mobile-nav__item" data-view="achievements">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-        <span>Badges</span>
+      <button class="mobile-nav__item study-only" data-mode="study" data-view="achievements">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+          <span>Badges</span>
       </button>
+  
+      <!-- Habit Mode Button -->
+      <button class="mobile-nav__item" data-mode="habit" data-view="habits" style="display: none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>Habits</span>
+      </button>
+  
+      <!-- Goal Mode Button -->
+      <button class="mobile-nav__item" data-mode="goal" data-view="goals" style="display: none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span>Goals</span>
+      </button>
+  
+      <!-- Step Mode Button -->
+      <button class="mobile-nav__item" data-mode="step" data-view="steps" style="display: none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+          <span>Steps</span>
+      </button>
+  
+      <!-- Common Settings Button -->
       <button class="mobile-nav__item" data-view="settings">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>Settings</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
       </button>
-    </nav>
-  </div>
+  </nav>
 
   <!-- Add Subject Modal -->
   <div class="modal-overlay" id="subjectModal" hidden>

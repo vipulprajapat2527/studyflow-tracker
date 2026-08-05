@@ -1,30 +1,113 @@
-// Pure page ke clicks ko handle karne wala master code
+// ===== 1. PAGE LOAD HOTE HI ACTIVE MODE APPLY KARO =====
+document.addEventListener('DOMContentLoaded', () => {
+  const savedMode = localStorage.getItem('selectedAppMode') || 'study';
+  switchAppMode(savedMode);
+});
+
+// ===== 2. WORKSPACE / MODE SWITCHING SYSTEM =====
+function switchAppMode(mode) {
+  if (!mode) mode = 'study';
+  localStorage.setItem('selectedAppMode', mode);
+
+  // Body par mode tag set karo
+  document.body.setAttribute('data-app-mode', mode);
+
+  // A. Sidebar & Bottom Nav Buttons Filter
+  document.querySelectorAll('.nav-item, [data-view]').forEach(btn => {
+      const btnMode = btn.getAttribute('data-mode');
+      if (!btnMode || btnMode === 'all' || btnMode === mode) {
+          btn.style.setProperty('display', 'flex', 'important');
+      } else {
+          btn.style.setProperty('display', 'none', 'important');
+      }
+  });
+
+  // B. Settings Cards Filter
+  document.querySelectorAll('#view-settings .card').forEach(card => {
+      const cardMode = card.getAttribute('data-mode');
+      if (!cardMode || cardMode === 'all' || cardMode === mode) {
+          card.style.display = 'block';
+      } else {
+          card.style.display = 'none';
+      }
+  });
+
+  // C. Default Page Open per Mode
+  let defaultView = 'dashboard';
+  if (mode === 'habit') defaultView = 'habits';
+  if (mode === 'goal') defaultView = 'goals';
+  if (mode === 'step') defaultView = 'steps';
+
+  openView(defaultView);
+}
+
+// ===== 3. SAFE VIEW OPENER (Mixing Rokne Ke Liye) =====
+function openView(viewName) {
+  // Pehle saare views hide karo
+  document.querySelectorAll('.view').forEach(v => {
+      v.style.display = 'none';
+      v.classList.remove('active');
+  });
+
+  // Target view ko open karo
+  const target = document.getElementById('view-' + viewName);
+  if (target) {
+      target.style.display = 'block';
+      target.classList.add('active');
+  }
+}
+
+// ===== 4. CLICK HANDLER =====
+document.addEventListener('click', (e) => {
+  const navBtn = e.target.closest('.nav-item') || e.target.closest('[data-view]');
+  if (navBtn) {
+      const view = navBtn.getAttribute('data-view');
+      if (view) {
+          openView(view);
+          if (view === 'settings') {
+              const currentMode = localStorage.getItem('selectedAppMode') || 'study';
+              switchAppMode(currentMode); // Settings me card re-filter
+          }
+      }
+  }
+});// Pure page ke clicks ko handle karne wala master code
 document.addEventListener('click', (e) => {
   // 1. Check karo ki kya sidebar (.nav-item) ya mobile bottom navigation button par click hua hai
-  // Apne HTML ke mutabik check kar lena agar bottom buttons par alag class ho (jaise .nav-link ya .bottom-nav-item)
   const navButton = e.target.closest('.nav-item') || e.target.closest('[data-view]');
-  
+
   if (navButton) {
       const view = navButton.getAttribute('data-view');
       if (view) {
           console.log("Mila target view:", view);
-          
-          // Saare nav buttons se active class hatao (chahe sidebar ho ya bottom bar)
+
+          // Saare nav buttons se active class hatao
           document.querySelectorAll('.nav-item, [data-view]').forEach(btn => btn.classList.remove('active'));
           navButton.classList.add('active');
-          
+
           // Saare sections ko chhupao
           document.querySelectorAll('.view, .view-section').forEach(sec => {
               sec.style.display = 'none';
           });
-          
+
           // Target section ko dikhao
           const targetSection = document.getElementById('view-' + view);
           if (targetSection) {
               targetSection.style.display = 'block';
           }
-  
-}
+
+          // ===== FIX: SETTINGS PAGE KE CARDS FILTER (Active Mode Ke Hisaab Se) =====
+          if (view === 'settings') {
+              const currentMode = localStorage.getItem('selectedAppMode') || 'study';
+              document.querySelectorAll('#view-settings .card').forEach(card => {
+                  const cardMode = card.getAttribute('data-mode');
+                  if (!cardMode || cardMode === 'all' || cardMode === currentMode) {
+                      card.style.display = 'block';
+                  } else {
+                      card.style.display = 'none';
+                  }
+              });
+          }
+      }
   }
 });
 
@@ -1107,53 +1190,9 @@ document.body.classList.remove('sidebar-open');
     renderAll();
   }
 
-document.getElementById("signupBtn")?.addEventListener("click", async () => {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
 
-  try {
-    await signup(email, password);
-    alert("Signup Successful");
-    localStorage.setItem('userLoggedIn', 'true');
-    location.reload()
-  } catch (error) {
-    alert(error.message);
-  }
-});
 
-// Login Handler
-document.getElementById("loginBtn")?.addEventListener("click", async (e) => {
-  e.preventDefault();
-  const email = document.getElementById("loginEmail")?.value;
-  const password = document.getElementById("loginPassword")?.value;
-  
-  if (typeof window.login === "function") {
-      try {
-          await window.login(email, password);
-          alert("Login Successful!");
-          localStorage.setItem('userLoggedIn', 'true');
-          location.reload();
-      } catch (error) {
-          alert("Login Error: " + error.message);
-      }
-  } else {
-    alert("Bhai, thoda ruko, background script load ho rhi hai.");
-  }
-});
 
-// Logout Handler
-document.getElementById("logoutBtn")?.addEventListener("click", async () => {
-  if (typeof window.logout === "function") {
-      try {
-          await window.logout();
-          alert("Logged Out!");
-          localStorage.removeItem('userLoggedIn');
-          location.reload();
-      } catch (error) {
-          alert(error.message);
-      }
-  }
-});
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof init === "function") {
         init();
@@ -1194,57 +1233,74 @@ function syncWrappedCardData() {
     console.warn("Wrapped Sync Warning: ", err);
   }
 }
+// --- Helper: Convert Base64 DataURL directly to File Object ---
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  
+  while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  
+  return new File([u8arr], filename, { type: mime });
+}
 
+// --- Share Progress Card Main Function ---
 async function shareWrappedCard() {
-  try {
-    const card = document.getElementById('study-wrapped-card');
-    const btn = document.getElementById('shareCardBtn');
+  const card = document.getElementById('study-wrapped-card');
+  const btn = document.getElementById('shareCardBtn');
 
-    if (!card) return;
-
-    syncWrappedCardData();
-
-    // Check if html2canvas library is ready
-    if (typeof html2canvas === 'undefined') {
-      alert("Library loading... Please try again in 2 seconds.");
+  if (!card) {
+      alert("Error: 'study-wrapped-card' element not found in HTML!");
       return;
-    }
+  }
 
-    const originalText = btn ? btn.innerText : "";
-    if (btn) btn.innerText = "⏳ Generating Card...";
+  if (typeof html2canvas === 'undefined') {
+      alert("Error: html2canvas library is not loaded yet. Please try again.");
+      return;
+  }
 
-    const canvas = await html2canvas(card, { scale: 2 });
+  const originalText = btn ? btn.innerText : "📸 Share Progress Card";
+  if (btn) btn.innerText = "⏳ Generating Card...";
 
-    canvas.toBlob(async (blob) => {
-      try {
-        if (!blob) {
-          if (btn) btn.innerText = originalText;
-          return;
-        }
-
-        const file = new File([blob], 'my-studyflow-report.png', { type: 'image/png' });
-
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: 'My StudyFlow Progress',
-            text: 'Check out my study streak on StudyFlow! 🚀',
-            files: [file]
-          });
-        } else {
-          const link = document.createElement('a');
-          link.download = 'my-studyflow-report.png';
-          link.href = canvas.toDataURL();
-          link.click();
-        }
-      } catch (e) {
-        console.log("Sharing cancelled or error:", e);
-      } finally {
-        if (btn) btn.innerText = originalText;
+  try {
+      if (typeof syncWrappedCardData === 'function') {
+          syncWrappedCardData();
       }
-    });
+
+      // 1. Render card to canvas
+      const canvas = await html2canvas(card, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#2ecc71"
+      });
+
+      const imageDataUrl = canvas.toDataURL('image/png');
+
+      // 2. Convert DataURL directly to File
+      const file = dataURLtoFile(imageDataUrl, 'studyflow-card.png');
+
+      // 3. Directly trigger Native System Share Sheet
+      if (navigator.share) {
+          await navigator.share({
+              title: 'StudyFlow Progress',
+              text: 'Check out my study progress on StudyFlow! 🚀',
+              files: [file]
+          });
+      } else {
+          alert("Sharing is not supported on this device/browser.");
+      }
 
   } catch (err) {
-    console.error("Share Card Error: ", err);
+      if (err.name !== 'AbortError') {
+          alert("Share Error: " + err.message);
+      }
+  } finally {
+      if (btn) btn.innerText = originalText;
   }
 }
 function updateWrappedCardData(weeklyTimeText, streakCount, topSubText, userRankText) {
