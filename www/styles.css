@@ -144,7 +144,7 @@ body[data-active-module="habit"] [data-module]:not([data-module="habit"]):not([d
 body[data-active-module="goal"] [data-module]:not([data-module="goal"]):not([data-module="all"]) { display: none !important; }
 body[data-active-module="expense"] [data-module]:not([data-module="expense"]):not([data-module="all"]) { display: none !important; }
 body[data-active-module="workout"] [data-module]:not([data-module="workout"]):not([data-module="all"]) { display: none !important; }
-body[data-active-module="reading"] [data-module]:not([data-module="reading"]):not([data-module="all"]) { display: none !important; }
+body[data-active-module="sleep"] [data-module]:not([data-module="sleep"]):not([data-module="all"]) { display: none !important; }
 body[data-active-module="water"] [data-module]:not([data-module="water"]):not([data-module="all"]) { display: none !important; }
 body[data-active-module="step"] [data-module]:not([data-module="step"]):not([data-module="all"]) { display: none !important; }
 
@@ -1400,6 +1400,47 @@ button, input, select { font-family: inherit; }
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
+}
+
+/* Premium Sleep Tracker Tags */
+.habit-tag-btn {
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.habit-tag-btn.active {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+}
+
+/* Premium Water Tracker */
+.water-ring {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) 0%, var(--bg-hover) 0%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: background 0.5s ease;
+    position: relative;
+}
+.water-ring-inner {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .settings-row:last-child { margin-bottom: 0; }
