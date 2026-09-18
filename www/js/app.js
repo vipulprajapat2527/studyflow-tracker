@@ -3092,19 +3092,63 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+  let lastNativeSteps = -1;
+
+  async function syncNativeSteps() {
+    if (window.Capacitor && Capacitor.Plugins.StepBackground) {
+      try {
+        const res = await Capacitor.Plugins.StepBackground.getSteps();
+        const nativeSteps = res.steps;
+        if (nativeSteps !== -1) {
+          if (lastNativeSteps !== -1 && nativeSteps > lastNativeSteps) {
+            const diff = Math.round(nativeSteps - lastNativeSteps);
+            if (diff > 0) {
+              addSteps(diff);
+            }
+          }
+          lastNativeSteps = nativeSteps;
+        }
+      } catch (e) {
+        console.error("Failed to sync native steps", e);
+      }
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      syncNativeSteps();
+    }
+  });
+
   const btnToggleAutoTrack = document.getElementById("btnToggleAutoTrack");
-  btnToggleAutoTrack?.addEventListener("click", () => {
+  btnToggleAutoTrack?.addEventListener("click", async () => {
     isAutoTracking = !isAutoTracking;
     if (isAutoTracking) {
       btnToggleAutoTrack.textContent = "⏸️ Pause Auto-Tracking";
       btnToggleAutoTrack.classList.replace("btn--primary", "btn--secondary");
       window.addEventListener("devicemotion", handleMotion);
+      
+      if (window.Capacitor && Capacitor.Plugins.StepBackground) {
+        try {
+          await Capacitor.Plugins.StepBackground.startTracker();
+        } catch (e) {
+          console.error("Failed to start native background tracker", e);
+        }
+      }
     } else {
       btnToggleAutoTrack.textContent = "▶️ Start Auto-Tracking";
       btnToggleAutoTrack.classList.replace("btn--secondary", "btn--primary");
       window.removeEventListener("devicemotion", handleMotion);
       currentSpeedStr = "0.0 km/h";
       renderSteps();
+      
+      if (window.Capacitor && Capacitor.Plugins.StepBackground) {
+        try {
+          await Capacitor.Plugins.StepBackground.stopTracker();
+        } catch (e) {
+          console.error("Failed to stop native background tracker", e);
+        }
+      }
     }
   });
 
