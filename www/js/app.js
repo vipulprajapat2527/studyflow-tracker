@@ -1463,22 +1463,43 @@ async function shareWrappedCard() {
 
     const imageDataUrl = canvas.toDataURL("image/png");
 
-    // 2. Convert DataURL directly to File
-    const file = dataURLtoFile(imageDataUrl, "studyflow-card.png");
+    try {
+      if (window.Capacitor && window.Capacitor.Plugins) {
+        const { Filesystem, Share } = window.Capacitor.Plugins;
+        if (Filesystem && Share) {
+          // Write the base64 string to a file in the Cache directory
+          const base64Data = imageDataUrl.split(",")[1];
+          const Directory = { Cache: 'CACHE' };
+          const fileName = "study_card_share.png";
 
-    // 3. Directly trigger Native System Share Sheet
-    if (navigator.share) {
-      await navigator.share({
-        title: "StudyFlow Progress",
-        text: "Check out my study progress on StudyFlow! 🚀",
-        files: [file],
-      });
-    } else {
-      alert("Sharing is not supported on this device/browser.");
+          const savedFile = await Filesystem.writeFile({
+            path: fileName,
+            data: base64Data,
+            directory: Directory.Cache
+          });
+
+          await Share.share({
+            title: 'My Study Progress',
+            files: [savedFile.uri]
+          });
+        }
+      } else if (navigator.share) {
+        // Fallback to web share API if not on Capacitor (no toast/download fallbacks)
+        const file = dataURLtoFile(imageDataUrl, "studyflow-card.png");
+        await navigator.share({
+          title: "My Study Progress",
+          text: "Check out my study progress on StudyFlow! 🚀",
+          files: [file],
+        });
+      }
+    } catch (shareErr) {
+      if (shareErr.name !== "AbortError") {
+        console.error("Share API failed:", shareErr);
+      }
     }
   } catch (err) {
     if (err.name !== "AbortError") {
-      alert("Share Error: " + err.message);
+      console.error("Card generation error:", err);
     }
   } finally {
     if (btn) btn.innerText = originalText;
