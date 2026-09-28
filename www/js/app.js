@@ -1376,7 +1376,7 @@ function init() {
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof init === "function") {
     init();
-    console.log("🚀 StudyFlow Core Engine Successfully Started!");
+    console.log("🚀 Meshine Core Engine Successfully Started!");
   } else {
     console.warn(
       "⚠️ init function nahi mili! Check karo app.js sahi se load hui hai ya nahi.",
@@ -1488,7 +1488,7 @@ async function shareWrappedCard() {
         const file = dataURLtoFile(imageDataUrl, "studyflow-card.png");
         await navigator.share({
           title: "My Study Progress",
-          text: "Check out my study progress on StudyFlow! 🚀",
+          text: "Check out my study progress on Meshine! 🚀",
           files: [file],
         });
       }
@@ -2597,10 +2597,19 @@ const playSleepSound = (url, activeBtnId) => {
       activeBtn.style.color = "#ffffff";
     }
 
+    // Add error handling on the audio element
+    sleepAudio.onerror = () => {
+      console.warn("Failed to load audio from:", url);
+    };
+
+    // Smoothly reset player state before loading the new URL
+    sleepAudio.pause();
+    sleepAudio.currentTime = 0;
+    
     sleepAudio.src = url;
     sleepAudio.volume = 1.0;
     sleepAudio.style.display = "block";
-    sleepAudio.play().catch((e) => console.log("Audio playback failed:", e));
+    sleepAudio.play().catch((e) => console.warn("Audio playback failed:", e));
   }
 };
 
@@ -2612,31 +2621,31 @@ audioBtns["btnSoundRain"]?.addEventListener("click", () =>
 );
 audioBtns["btnSoundDeep"]?.addEventListener("click", () =>
   playSleepSound(
-    "https://actions.google.com/sounds/v1/science_fiction/alien_breath.ogg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/77/Binaural_Beats_-_Delta_Sleep_Waves_%281_to_4_Hz%29.ogg",
     "btnSoundDeep",
   ),
 );
 audioBtns["btnSoundTheta"]?.addEventListener("click", () =>
   playSleepSound(
-    "https://actions.google.com/sounds/v1/science_fiction/humming_drone.ogg",
+    "https://upload.wikimedia.org/wikipedia/commons/8/87/Binaural_Beats_-_Theta_Waves_%284_to_8_Hz%29.ogg",
     "btnSoundTheta",
   ),
 );
 audioBtns["btnSoundZen"]?.addEventListener("click", () =>
   playSleepSound(
-    "https://actions.google.com/sounds/v1/foley/wind_chimes.ogg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/23/Wind_chimes.ogg",
     "btnSoundZen",
   ),
 );
 audioBtns["btnSoundBinaural"]?.addEventListener("click", () =>
   playSleepSound(
-    "https://actions.google.com/sounds/v1/science_fiction/power_cord_hum.ogg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/4e/Binaural_Beats_-_Alpha_Waves_%288_to_14_Hz%29.ogg",
     "btnSoundBinaural",
   ),
 );
 audioBtns["btnSoundAstral"]?.addEventListener("click", () =>
   playSleepSound(
-    "https://actions.google.com/sounds/v1/science_fiction/spaceship_interior.ogg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b3/Space_ambient.ogg",
     "btnSoundAstral",
   ),
 );
