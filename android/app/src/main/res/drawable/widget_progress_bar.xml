@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background Track: Soft light rounded track (#EEF2FF, radius 8dp) -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="8dp" />
+            <solid android:color="#EEF2FF" />
+        </shape>
+    </item>
+
+    <!-- Progress Track: Smooth left-to-right gradient using Meshine's brand palette -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape android:shape="rectangle">
+                <corners android:radius="8dp" />
+                <gradient
+                    android:angle="0"
+                    android:startColor="#00D2FF"
+                    android:centerColor="#8B5CF6"
+                    android:endColor="#FF7A00" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

@@ -7,7 +7,7 @@ html, body {
 :root {
   --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
-  --bg: #f4f6fb;
+  --bg: #f8fafc;
   --bg-card: #ffffff;
   --bg-elevated: #ffffff;
   --bg-sidebar: #ffffff;
@@ -29,8 +29,8 @@ html, body {
   --warning-light: rgba(245, 158, 11, 0.12);
   --danger: #ef4444;
   --danger-light: rgba(239, 68, 68, 0.12);
-  --streak: #f97316;
-  --streak-light: rgba(249, 115, 22, 0.12);
+  --streak: #3b82f6;
+  --streak-light: rgba(59, 130, 246, 0.15);
 
   --hero-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
   --rank-beginner: #22c55e;
@@ -53,15 +53,15 @@ html, body {
 }
 
 [data-theme="dark"] {
-  --bg: #0b0f1a;
-  --bg-card: #151b2e;
-  --bg-elevated: #1e2740;
-  --bg-sidebar: #111827;
-  --text: #f1f5f9;
+  --bg: #0b0f19;
+  --bg-card: #131a2a;
+  --bg-elevated: #1a2338;
+  --bg-sidebar: #0f1523;
+  --text: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --border: #2a3548;
-  --border-light: #1e2740;
+  --border: #1e293b;
+  --border-light: #162032;
 
   --primary-light: rgba(99, 102, 241, 0.18);
   --primary-glow: rgba(99, 102, 241, 0.4);
@@ -600,12 +600,119 @@ button, input, select { font-family: inherit; }
   justify-content: center;
   border-radius: var(--radius-xs);
   background: var(--primary-light);
+  flex-shrink: 0;
 }
 
-.stat-card--streak .stat-card__icon { background: var(--streak-light); }
-.stat-card--today .stat-card__icon { background: var(--primary-light); }
-.stat-card--goal .stat-card__icon { background: var(--success-light); }
-.stat-card--total .stat-card__icon { background: var(--warning-light); }
+/* ===== VIBRANT COLORFUL STAT CARDS (Blue, Red, Yellow) ===== */
+
+/* 1. "Current Streak": Vibrant Blue Card (#3B82F6 with bold white text) */
+.stat-card--streak,
+.stat-card--blue,
+.stat-box--streak,
+[data-stat-card="streak"] {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* 2. "Finished / Completed": Vibrant Red / Coral Card (#EF4444 with bold white text) */
+.stat-card--completed,
+.stat-card--finished,
+.stat-card--red,
+[data-stat-card="completed"] {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35) !important;
+}
+
+/* 3. "Completion Rate / Goal Progress": Vibrant Yellow / Gold Card (#F59E0B with bold white text) */
+.stat-card--goal,
+.stat-card--rate,
+.stat-card--yellow,
+[data-stat-card="progress"] {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35) !important;
+}
+
+/* 4. "Today": Vibrant Purple Card */
+.stat-card--today,
+.stat-card--purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35) !important;
+}
+
+/* 5. "Total / All Time": Vibrant Cyan / Teal Card */
+.stat-card--total,
+.stat-card--cyan {
+  background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 18px rgba(6, 182, 212, 0.35) !important;
+}
+
+/* High-Contrast Bold White Typography for all colored stat cards */
+.stat-card--streak .stat-card__label,
+.stat-card--blue .stat-card__label,
+.stat-card--completed .stat-card__label,
+.stat-card--finished .stat-card__label,
+.stat-card--red .stat-card__label,
+.stat-card--goal .stat-card__label,
+.stat-card--rate .stat-card__label,
+.stat-card--yellow .stat-card__label,
+.stat-card--today .stat-card__label,
+.stat-card--purple .stat-card__label,
+.stat-card--total .stat-card__label,
+.stat-card--cyan .stat-card__label,
+.stat-box--streak small {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stat-card--streak .stat-card__value,
+.stat-card--blue .stat-card__value,
+.stat-card--completed .stat-card__value,
+.stat-card--finished .stat-card__value,
+.stat-card--red .stat-card__value,
+.stat-card--goal .stat-card__value,
+.stat-card--rate .stat-card__value,
+.stat-card--yellow .stat-card__value,
+.stat-card--today .stat-card__value,
+.stat-card--purple .stat-card__value,
+.stat-card--total .stat-card__value,
+.stat-card--cyan .stat-card__value,
+.stat-card--streak .stat-card__value--up,
+.stat-card--streak .stat-card__value--down,
+.stat-card--completed .stat-card__value--up,
+.stat-card--completed .stat-card__value--down,
+.stat-card--goal .stat-card__value--up,
+.stat-card--goal .stat-card__value--down,
+.stat-card--rate .stat-card__value--up,
+.stat-card--rate .stat-card__value--down,
+.stat-box--streak span {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+.stat-card--streak .stat-card__icon,
+.stat-card--blue .stat-card__icon,
+.stat-card--completed .stat-card__icon,
+.stat-card--finished .stat-card__icon,
+.stat-card--red .stat-card__icon,
+.stat-card--goal .stat-card__icon,
+.stat-card--rate .stat-card__icon,
+.stat-card--yellow .stat-card__icon,
+.stat-card--today .stat-card__icon,
+.stat-card--purple .stat-card__icon,
+.stat-card--total .stat-card__icon,
+.stat-card--cyan .stat-card__icon {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(4px) !important;
+}
 
 .stat-card--analytics {
   flex-direction: column;

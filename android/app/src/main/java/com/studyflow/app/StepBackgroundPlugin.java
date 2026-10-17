@@ -80,4 +80,26 @@ public class StepBackgroundPlugin extends Plugin {
         ret.put("steps", currentSteps);
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void syncWidgetData(PluginCall call) {
+        int steps = call.getInt("steps", 0);
+        int goal = call.getInt("goal", 10000);
+        
+        android.content.SharedPreferences meshinePrefs = getContext().getSharedPreferences("MeshineStepData", android.content.Context.MODE_PRIVATE);
+        meshinePrefs.edit().putInt("current_steps", steps).putInt("step_goal", goal).apply();
+        
+        android.content.SharedPreferences prefs = getContext().getSharedPreferences("StepTrackerPrefs", android.content.Context.MODE_PRIVATE);
+        float currentSensorSteps = prefs.getFloat("currentSteps", 0f);
+        float offset = currentSensorSteps - steps;
+        
+        String today = new java.text.SimpleDateFormat("yyyy-M-d", java.util.Locale.US).format(new java.util.Date());
+        prefs.edit().putFloat("widget_offset_" + today, offset).apply();
+
+        Intent widgetIntent = new Intent(getContext(), StepWidgetProvider.class);
+        widgetIntent.setAction(android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        getContext().sendBroadcast(widgetIntent);
+        
+        call.resolve();
+    }
 }

@@ -339,7 +339,7 @@
               <div class="stat-card stat-card--streak">
                 <div class="stat-card__icon">🔥</div>
                 <div>
-                  <p class="stat-card__label">Streak</p>
+                  <p class="stat-card__label">Current Streak</p>
                   <p class="stat-card__value" id="streakCount">0 days</p>
                 </div>
               </div>
@@ -353,14 +353,14 @@
               <div class="stat-card stat-card--goal">
                 <div class="stat-card__icon">🎯</div>
                 <div>
-                  <p class="stat-card__label">Daily Goal</p>
+                  <p class="stat-card__label">Goal Progress</p>
                   <p class="stat-card__value" id="goalDisplay">2h 0m</p>
                 </div>
               </div>
-              <div class="stat-card stat-card--total">
-                <div class="stat-card__icon">📚</div>
+              <div class="stat-card stat-card--completed">
+                <div class="stat-card__icon">✅</div>
                 <div>
-                  <p class="stat-card__label">All Time</p>
+                  <p class="stat-card__label">Finished / All Time</p>
                   <p class="stat-card__value" id="allTimeTotal">0h 0m</p>
                 </div>
               </div>
@@ -791,15 +791,15 @@
             </div>
 
             <div class="stats-row stats-row--analytics">
-              <div class="stat-card stat-card--analytics">
+              <div class="stat-card stat-card--analytics stat-card--streak">
                 <p class="stat-card__label">Best Day (Week)</p>
                 <p class="stat-card__value" id="bestDay">—</p>
               </div>
-              <div class="stat-card stat-card--analytics">
+              <div class="stat-card stat-card--analytics stat-card--completed">
                 <p class="stat-card__label">vs Last Week</p>
                 <p class="stat-card__value" id="weekComparison">—</p>
               </div>
-              <div class="stat-card stat-card--analytics">
+              <div class="stat-card stat-card--analytics stat-card--rate">
                 <p class="stat-card__label">Active Subjects</p>
                 <p class="stat-card__value" id="activeSubjects">0</p>
               </div>
@@ -915,136 +915,55 @@
               </div>
             </div>
 
-            <!-- 12 Color Themes Picker -->
-            <div
+            <!-- Appearance: Clean Light/Dark Theme Switch -->
+            <section
               class="card"
               data-module="all"
               style="margin-top: 1rem; padding: 1.5rem"
             >
-              <h3 style="margin-bottom: 0.25rem">
-                App Themes (12 Modern Styles)
-              </h3>
+              <h2 class="card__title" style="margin-bottom: 0.25rem">
+                Appearance
+              </h2>
               <p
                 style="
                   color: var(--text-secondary);
-                  font-size: 0.9rem;
+                  font-size: 0.875rem;
                   margin-bottom: 1rem;
                 "
               >
-                Choose your favorite accent color palette:
+                Switch between clean Light and Dark interface display:
               </p>
 
-              <div class="theme-picker-grid" id="themePickerGrid">
-                <div class="theme-swatch active" data-theme-name="purple">
-                  <div
-                    class="theme-swatch__circle"
+              <label class="toggle-row" for="settingsDarkModeToggle">
+                <div>
+                  <span
+                    class="toggle-row__label"
                     style="
-                      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                      font-weight: 600;
+                      font-size: 0.95rem;
+                      color: var(--text);
+                      display: block;
                     "
-                  ></div>
-                  <span class="theme-swatch__label">Purple</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="ocean-blue">
-                  <div
-                    class="theme-swatch__circle"
+                    >Dark Mode</span
+                  >
+                  <span
                     style="
-                      background: linear-gradient(135deg, #0284c7, #06b6d4);
+                      font-size: 0.8rem;
+                      color: var(--text-secondary);
+                      display: block;
+                      margin-top: 2px;
                     "
-                  ></div>
-                  <span class="theme-swatch__label">Ocean</span>
+                    >Enable dark slate theme for comfortable night-time view</span
+                  >
                 </div>
-                <div class="theme-swatch" data-theme-name="mint">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #10b981, #14b8a6);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Mint</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="sunset">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #f97316, #ef4444);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Sunset</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="midnight">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #3730a3, #6366f1);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Midnight</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="forest">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #047857, #10b981);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Forest</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="rose">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #e11d48, #f43f5e);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Rose</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="amber">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #d97706, #f59e0b);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Amber</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="cyber">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #7c3aed, #d946ef);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Cyber</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="slate">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #334155, #64748b);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Slate</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="emerald">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #065f46, #059669);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Emerald</span>
-                </div>
-                <div class="theme-swatch" data-theme-name="minimal-white">
-                  <div
-                    class="theme-swatch__circle"
-                    style="
-                      background: linear-gradient(135deg, #18181b, #52525b);
-                    "
-                  ></div>
-                  <span class="theme-swatch__label">Minimal</span>
-                </div>
-              </div>
-            </div>
+                <input
+                  type="checkbox"
+                  id="settingsDarkModeToggle"
+                  class="toggle"
+                />
+                <span class="toggle__slider"></span>
+              </label>
+            </section>
 
             <section class="card" data-module="study">
               <h2 class="card__title">Daily Goal</h2>
@@ -1144,24 +1063,24 @@
             </div>
 
             <div class="stats-row">
-              <div class="stat-card">
-                <div class="stat-card__icon">🔁</div>
-                <div>
-                  <p class="stat-card__label">Active Habits</p>
-                  <p class="stat-card__value" id="hb-stat-active">0</p>
-                </div>
-              </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--streak">
                 <div class="stat-card__icon">🔥</div>
                 <div>
-                  <p class="stat-card__label">Best Streak</p>
+                  <p class="stat-card__label">Current Streak</p>
                   <p class="stat-card__value" id="hb-stat-streak">0</p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--completed">
+                <div class="stat-card__icon">🔁</div>
+                <div>
+                  <p class="stat-card__label">Finished / Active</p>
+                  <p class="stat-card__value" id="hb-stat-active">0</p>
+                </div>
+              </div>
+              <div class="stat-card stat-card--rate">
                 <div class="stat-card__icon">⚡</div>
                 <div>
-                  <p class="stat-card__label">Today's Rate</p>
+                  <p class="stat-card__label">Completion Rate</p>
                   <p class="stat-card__value" id="hb-stat-rate">0%</p>
                 </div>
               </div>
@@ -2262,30 +2181,21 @@
             </div>
 
             <div class="stats-row">
-              <div
-                class="stat-card"
-                style="border-left: 4px solid var(--primary)"
-              >
+              <div class="stat-card stat-card--streak">
                 <div class="stat-card__icon">🏦</div>
                 <div>
                   <p class="stat-card__label">Current Balance</p>
                   <p class="stat-card__value" id="ex-stat-balance">₹0.00</p>
                 </div>
               </div>
-              <div
-                class="stat-card"
-                style="border-left: 4px solid var(--success)"
-              >
+              <div class="stat-card stat-card--goal">
                 <div class="stat-card__icon">💵</div>
                 <div>
                   <p class="stat-card__label">Total Income</p>
                   <p class="stat-card__value" id="ex-stat-income">₹0.00</p>
                 </div>
               </div>
-              <div
-                class="stat-card"
-                style="border-left: 4px solid var(--danger)"
-              >
+              <div class="stat-card stat-card--completed">
                 <div class="stat-card__icon">💸</div>
                 <div>
                   <p class="stat-card__label">Total Expense</p>
@@ -2749,21 +2659,21 @@
             </div>
 
             <div class="stats-row">
-              <div class="stat-card">
+              <div class="stat-card stat-card--completed">
                 <div class="stat-card__icon">🔥</div>
                 <div>
                   <p class="stat-card__label">Today's Calorie Burn</p>
                   <p class="stat-card__value" id="workoutTodayCals">0 kcal</p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--streak">
                 <div class="stat-card__icon">🔥</div>
                 <div>
-                  <p class="stat-card__label">Active Streak</p>
+                  <p class="stat-card__label">Current Streak</p>
                   <p class="stat-card__value" id="workoutStreak">0 Days</p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--goal">
                 <div class="stat-card__icon">🏋️</div>
                 <div>
                   <p class="stat-card__label">Total Volume (kg)</p>
@@ -3755,21 +3665,21 @@
                 gap: 10px;
               "
             >
-              <div class="stat-card">
+              <div class="stat-card stat-card--completed">
                 <div class="stat-card__icon">🔥</div>
                 <div>
                   <p class="stat-card__label">Calories Burned</p>
                   <p class="stat-card__value" id="stepCalorieTotal">0 kcal</p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--streak">
                 <div class="stat-card__icon">📏</div>
                 <div>
                   <p class="stat-card__label">Distance</p>
                   <p class="stat-card__value" id="stepDistanceTotal">0.0 km</p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--goal">
                 <div class="stat-card__icon">⏱️</div>
                 <div>
                   <p class="stat-card__label">Active Time</p>
@@ -3778,7 +3688,7 @@
                   </p>
                 </div>
               </div>
-              <div class="stat-card">
+              <div class="stat-card stat-card--today">
                 <div class="stat-card__icon">🏃‍♂️</div>
                 <div>
                   <p class="stat-card__label">Speed</p>

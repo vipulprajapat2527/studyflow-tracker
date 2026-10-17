@@ -561,10 +561,13 @@ function escapeHtml(str) {
 }
 
 function applyTheme() {
-  document.documentElement.setAttribute(
-    "data-theme",
-    state.settings.darkMode ? "dark" : "light",
-  );
+  const isDark = !!state.settings.darkMode;
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+  document.body.setAttribute("data-theme", isDark ? "dark" : "light");
+  const settingsToggle = document.getElementById("settingsDarkModeToggle");
+  if (settingsToggle) {
+    settingsToggle.checked = isDark;
+  }
 }
 
 function setRingProgress(el, current, total) {
@@ -1297,6 +1300,14 @@ function toggleTheme() {
 
 function bindEvents() {
   els.themeToggle.addEventListener("click", toggleTheme);
+  const settingsDarkModeToggle = document.getElementById("settingsDarkModeToggle");
+  if (settingsDarkModeToggle) {
+    settingsDarkModeToggle.addEventListener("change", (e) => {
+      state.settings.darkMode = e.target.checked;
+      applyTheme();
+      saveState();
+    });
+  }
   els.menuToggle.addEventListener("click", () =>
     els.sidebar.classList.toggle("open"),
   );
@@ -1587,10 +1598,7 @@ const themeColorMap = {
 function changeAppTheme(themeName) {
   const theme = themeColorMap[themeName] || themeColorMap["purple"];
 
-  // 1. Data-theme attribute set karo
-  document.body.setAttribute("data-theme", themeName);
-
-  // 2. Dynamic Style Tag Inject/Update karo (CSS ki urat hi nahi)
+  // Apply accent color only to the exportable Wrapped Card without breaking global Light/Dark mode
   let styleTag = document.getElementById("dynamic-theme-override");
   if (!styleTag) {
     styleTag = document.createElement("style");
@@ -1598,27 +1606,19 @@ function changeAppTheme(themeName) {
     document.head.appendChild(styleTag);
   }
 
-  // Pure app me variables overwrite kar do
   styleTag.innerHTML = `
-    :root, body, [data-theme="${themeName}"] {
-      --primary-color: ${theme.primary} !important;
-      --primary: ${theme.primary} !important;
-      --accent-color: ${theme.accent} !important;
-      --accent: ${theme.accent} !important;
-    }
-    .wrapped-card, .btn-primary, .primary-bg, .task-item input:checked {
+    .wrapped-card {
       background: ${theme.primary} !important;
     }
-    .wrapped-hero h2, .note-item h4 {
+    .wrapped-hero h2 {
       color: ${theme.accent} !important;
     }
   `;
 
-  // 3. LocalStorage me save karo
   localStorage.setItem("studyflow_theme", themeName);
 }
 
-// App Load hote hi saved theme wapas apply karo
+// Wrapped card initial accent
 window.addEventListener("DOMContentLoaded", function () {
   const savedTheme = localStorage.getItem("studyflow_theme") || "purple";
   changeAppTheme(savedTheme);
@@ -2963,6 +2963,10 @@ function renderSteps() {
 
   renderStepCalendar();
   renderStepAnalytics();
+
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StepBackground) {
+    window.Capacitor.Plugins.StepBackground.syncWidgetData({ steps: todaySteps, goal: goal });
+  }
 }
 
 function renderStepCalendar() {

@@ -101,6 +101,25 @@ public class StepForegroundService extends Service implements SensorEventListene
             String today = new SimpleDateFormat("yyyy-M-d", Locale.US).format(new Date());
             String key = "steps_" + today;
             prefs.edit().putFloat(key, totalSteps).apply();
+
+            float offset = prefs.getFloat("widget_offset_" + today, -1f);
+            if (offset == -1f) {
+                offset = totalSteps;
+                prefs.edit().putFloat("widget_offset_" + today, offset).apply();
+            }
+
+            int todayStepsForWidget = (int) Math.max(0, totalSteps - offset);
+
+            SharedPreferences meshinePrefs = getSharedPreferences("MeshineStepData", Context.MODE_PRIVATE);
+            int stepGoal = meshinePrefs.getInt("step_goal", 10000);
+            meshinePrefs.edit()
+                    .putInt("current_steps", todayStepsForWidget)
+                    .putInt("step_goal", stepGoal)
+                    .apply();
+
+            Intent widgetIntent = new Intent(this, StepWidgetProvider.class);
+            widgetIntent.setAction(android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            sendBroadcast(widgetIntent);
         }
     }
 
