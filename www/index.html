@@ -4567,21 +4567,65 @@
           }
         });
       </script>
+      <!-- Unified Bottom Navigation Swipe Gesture Handler Across All Trackers -->
       <script>
         document.addEventListener("DOMContentLoaded", () => {
           let startX = 0;
           let startY = 0;
+          let startTime = 0;
+
+          // Helper to get all bottom tabs for the currently active tracker
+          // Index 0: Dash | Index 1: Cal / Calendar / Grid / Log | Index 2: Stats / Analytics | Index 3: Settings
+          function getTrackerTabs() {
+            const activeMod =
+              document.body.getAttribute("data-active-module") || "study";
+
+            // Query bottom mobile-nav buttons first (with sidebar fallback)
+            let trackerButtons = Array.from(
+              document.querySelectorAll(
+                `.mobile-nav .nav-item[data-module="${activeMod}"]`,
+              ),
+            );
+            let settingsButton = document.querySelector(
+              `.mobile-nav .nav-item[data-module="all"][data-view="settings"]`,
+            );
+
+            if (trackerButtons.length === 0) {
+              trackerButtons = Array.from(
+                document.querySelectorAll(
+                  `.sidebar .nav-item[data-module="${activeMod}"]`,
+                ),
+              );
+              settingsButton = document.querySelector(
+                `.sidebar .nav-item[data-module="all"][data-view="settings"]`,
+              );
+            }
+
+            // Ensure Settings tab is unified as the 4th tab (or final tab) across all tracker modules
+            const tabs = [...trackerButtons];
+            if (settingsButton && !tabs.includes(settingsButton)) {
+              tabs.push(settingsButton);
+            }
+
+            return { activeMod, tabs };
+          }
 
           window.addEventListener(
             "touchstart",
             (e) => {
+              // Ignore swipe if sidebar drawer is open or user is interacting with form controls / modals
               if (
                 document.querySelector(".sidebar.open") ||
-                document.querySelector(".sidebar.active")
-              )
+                document.querySelector(".sidebar.active") ||
+                (e.target && e.target.closest && e.target.closest("input, select, textarea, .modal:not([hidden]), .modal-overlay:not([hidden])"))
+              ) {
+                startX = 0;
+                startY = 0;
                 return;
+              }
               startX = e.touches[0].clientX;
               startY = e.touches[0].clientY;
+              startTime = Date.now();
             },
             { passive: true },
           );
@@ -4589,34 +4633,73 @@
           window.addEventListener(
             "touchend",
             (e) => {
+              if (!startX || !startY) return;
+
               let endX = e.changedTouches[0].clientX;
               let endY = e.changedTouches[0].clientY;
+              let elapsed = Date.now() - startTime;
 
               let diffX = startX - endX;
               let diffY = startY - endY;
 
-              if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
-                const activeMod =
-                  document.body.getAttribute("data-active-module") || "study";
-                const moduleButtons = Array.from(
-                  document.querySelectorAll(
-                    `.sidebar .nav-item[data-module="${activeMod}"]`,
-                  ),
-                );
-                if (moduleButtons.length <= 1) return;
+              // Reset start coordinates
+              startX = 0;
+              startY = 0;
 
-                let currentIndex = moduleButtons.findIndex((btn) =>
+              // Validate horizontal swipe gesture:
+              // 1. Horizontal movement must exceed vertical movement (prevent hijacking vertical scrolling)
+              // 2. Minimum threshold of 50px
+              // 3. Maximum duration to ensure intentional swipe (e.g. within 650ms)
+              if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50 && elapsed < 650) {
+                const { tabs } = getTrackerTabs();
+                if (tabs.length <= 1) return;
+
+                const maxIndex = tabs.length - 1;
+
+                // Find current active index across the unified tabs
+                let currentIndex = tabs.findIndex((btn) =>
                   btn.classList.contains("active"),
                 );
+
+                // Robust fallback: check active view container if nav button doesn't have active class yet
+                if (currentIndex === -1) {
+                  const activeViewEl = document.querySelector(
+                    ".view.active, .view--active, .view[style*='display: block']",
+                  );
+                  if (activeViewEl) {
+                    const activeViewId = activeViewEl.id.replace(/^view-/, "");
+                    currentIndex = tabs.findIndex(
+                      (btn) => btn.getAttribute("data-view") === activeViewId,
+                    );
+                  }
+                }
                 if (currentIndex === -1) currentIndex = 0;
 
-                // LEFT SWIPE -> Next page in active module
-                if (diffX > 60 && currentIndex < moduleButtons.length - 1) {
-                  moduleButtons[currentIndex + 1].click();
+                let nextIndex = currentIndex;
+
+                // SWIPE LEFT -> Transition to Next Tab (e.g., Stats [Index 2] -> Settings [Index 3])
+                if (diffX > 50 && currentIndex < maxIndex) {
+                  nextIndex = currentIndex + 1;
                 }
-                // RIGHT SWIPE -> Previous page in active module
-                else if (diffX < -60 && currentIndex > 0) {
-                  moduleButtons[currentIndex - 1].click();
+                // SWIPE RIGHT -> Transition to Previous Tab (e.g., Settings [Index 3] -> Stats [Index 2])
+                else if (diffX < -50 && currentIndex > 0) {
+                  nextIndex = currentIndex - 1;
+                }
+
+                if (nextIndex !== currentIndex && tabs[nextIndex]) {
+                  const targetBtn = tabs[nextIndex];
+                  const targetView = targetBtn.getAttribute("data-view");
+
+                  // Trigger tab click to fire standard view routers
+                  targetBtn.click();
+
+                  // Explicitly ensure unified active state synchronization across all bottom nav & sidebar items
+                  if (typeof openView === "function" && targetView) {
+                    openView(targetView);
+                  }
+                  if (typeof navigateTo === "function" && targetView) {
+                    navigateTo(targetView);
+                  }
                 }
               }
             },
