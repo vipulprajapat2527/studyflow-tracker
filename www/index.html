@@ -428,78 +428,6 @@
               </button>
               <button class="timer-tab" data-timer="pomodoro">Pomodoro</button>
             </div>
-            <!-- --- Syllabus & Task Checklist Section --- -->
-            <div class="syllabus-card">
-              <h2>📚 Syllabus Tracker</h2>
-              <!-- Subject Select Dropdown -->
-              <div style="margin-bottom: 12px">
-                <select
-                  id="syllabus-subject-select"
-                  onchange="renderSyllabusList()"
-                  style="
-                    width: 100%;
-                    padding: 10px;
-                    border-radius: 8px;
-                    background: #2b2b3d;
-                    color: #fff;
-                    border: 1px solid #333;
-                    outline: none;
-                    font-size: 14px;
-                    cursor: pointer;
-                  "
-                >
-                  <!-- App ke subjects automatic yahan aayenge -->
-                </select>
-              </div>
-
-              <div class="syllabus-input-group">
-                <input
-                  type="text"
-                  id="chapter-input"
-                  placeholder="Chapter / enter topic name..."
-                />
-                <button onclick="addChapterTask()">+ Add</button>
-              </div>
-
-              <!-- Live Progress Bar -->
-              <div class="progress-container">
-                <div class="progress-info">
-                  <span>Syllabus Completed</span>
-                  <span id="syllabus-progress-text">0%</span>
-                </div>
-                <div class="progress-bar-bg">
-                  <div
-                    id="syllabus-progress-fill"
-                    class="progress-bar-fill"
-                    style="width: 0%"
-                  ></div>
-                </div>
-              </div>
-
-              <!-- Task Checklist List -->
-              <ul id="syllabus-task-list" class="task-list"></ul>
-            </div>
-            <!-- --- Quick Notes Section --- -->
-            <div class="notes-card">
-              <h2>📝 Quick Notes & Revision</h2>
-
-              <div class="notes-input-group">
-                <input
-                  type="text"
-                  id="note-title-input"
-                  placeholder="Note Title (e.g., C Variable Swap Formula)..."
-                />
-                <textarea
-                  id="note-content-input"
-                  rows="3"
-                  placeholder="Yahan detail/code logic type karo..."
-                ></textarea>
-                <button onclick="addQuickNote()">+ Save Note</button>
-              </div>
-
-              <!-- Saved Notes Container -->
-              <div id="quick-notes-list" class="notes-grid"></div>
-            </div>
 
             <!-- Free Timer -->
             <section
@@ -661,6 +589,79 @@
                 </li>
               </ul>
             </section>
+
+            <!-- --- Syllabus & Task Checklist Section --- -->
+            <div class="syllabus-card">
+              <h2>📚 Syllabus Tracker</h2>
+              <!-- Subject Select Dropdown -->
+              <div style="margin-bottom: 12px">
+                <select
+                  id="syllabus-subject-select"
+                  onchange="renderSyllabusList()"
+                  style="
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 8px;
+                    background: #2b2b3d;
+                    color: #fff;
+                    border: 1px solid #333;
+                    outline: none;
+                    font-size: 14px;
+                    cursor: pointer;
+                  "
+                >
+                  <!-- App ke subjects automatic yahan aayenge -->
+                </select>
+              </div>
+
+              <div class="syllabus-input-group">
+                <input
+                  type="text"
+                  id="chapter-input"
+                  placeholder="Chapter / enter topic name..."
+                />
+                <button onclick="addChapterTask()">+ Add</button>
+              </div>
+
+              <!-- Live Progress Bar -->
+              <div class="progress-container">
+                <div class="progress-info">
+                  <span>Syllabus Completed</span>
+                  <span id="syllabus-progress-text">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div
+                    id="syllabus-progress-fill"
+                    class="progress-bar-fill"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Task Checklist List -->
+              <ul id="syllabus-task-list" class="task-list"></ul>
+            </div>
+            <!-- --- Quick Notes Section --- -->
+            <div class="notes-card">
+              <h2>📝 Quick Notes & Revision</h2>
+
+              <div class="notes-input-group">
+                <input
+                  type="text"
+                  id="note-title-input"
+                  placeholder="Note Title (e.g., C Variable Swap Formula)..."
+                />
+                <textarea
+                  id="note-content-input"
+                  rows="3"
+                  placeholder="Yahan detail/code logic type karo..."
+                ></textarea>
+                <button onclick="addQuickNote()">+ Save Note</button>
+              </div>
+
+              <!-- Saved Notes Container -->
+              <div id="quick-notes-list" class="notes-grid"></div>
+            </div>
           </section>
 
           <!-- ===== ANALYTICS VIEW ===== -->
