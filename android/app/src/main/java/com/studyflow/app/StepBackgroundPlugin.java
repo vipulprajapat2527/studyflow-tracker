@@ -86,8 +86,8 @@ public class StepBackgroundPlugin extends Plugin {
         int steps = call.getInt("steps", 0);
         int goal = call.getInt("goal", 10000);
         
-        android.content.SharedPreferences meshinePrefs = getContext().getSharedPreferences("MeshineStepData", android.content.Context.MODE_PRIVATE);
-        meshinePrefs.edit().putInt("current_steps", steps).putInt("step_goal", goal).apply();
+        android.content.SharedPreferences meShinePrefs = getContext().getSharedPreferences("MeShineStepData", android.content.Context.MODE_PRIVATE);
+        meShinePrefs.edit().putInt("current_steps", steps).putInt("step_goal", goal).apply();
         
         android.content.SharedPreferences prefs = getContext().getSharedPreferences("StepTrackerPrefs", android.content.Context.MODE_PRIVATE);
         float currentSensorSteps = prefs.getFloat("currentSteps", 0f);

@@ -34,7 +34,7 @@ public class StepWidgetProvider extends AppWidgetProvider {
     }
 
     private void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences("MeshineStepData", Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences("MeShineStepData", Context.MODE_PRIVATE);
         int currentSteps = prefs.getInt("current_steps", 0);
         int stepGoal = prefs.getInt("step_goal", 10000);
 

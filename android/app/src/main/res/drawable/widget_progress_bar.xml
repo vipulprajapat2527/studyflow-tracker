@@ -8,7 +8,7 @@
         </shape>
     </item>
 
-    <!-- Progress Track: Smooth left-to-right gradient using Meshine's brand palette -->
+    <!-- Progress Track: Smooth left-to-right gradient using MeShine's brand palette -->
     <item android:id="@android:id/progress">
         <clip>
             <shape android:shape="rectangle">

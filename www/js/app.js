@@ -1387,7 +1387,7 @@ function init() {
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof init === "function") {
     init();
-    console.log("🚀 Meshine Core Engine Successfully Started!");
+    console.log("🚀 MeShine Core Engine Successfully Started!");
   } else {
     console.warn(
       "⚠️ init function nahi mili! Check karo app.js sahi se load hui hai ya nahi.",
@@ -1499,7 +1499,7 @@ async function shareWrappedCard() {
         const file = dataURLtoFile(imageDataUrl, "studyflow-card.png");
         await navigator.share({
           title: "My Study Progress",
-          text: "Check out my study progress on Meshine! 🚀",
+          text: "Check out my study progress on MeShine! 🚀",
           files: [file],
         });
       }

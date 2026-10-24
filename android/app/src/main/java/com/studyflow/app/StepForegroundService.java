@@ -110,9 +110,9 @@ public class StepForegroundService extends Service implements SensorEventListene
 
             int todayStepsForWidget = (int) Math.max(0, totalSteps - offset);
 
-            SharedPreferences meshinePrefs = getSharedPreferences("MeshineStepData", Context.MODE_PRIVATE);
-            int stepGoal = meshinePrefs.getInt("step_goal", 10000);
-            meshinePrefs.edit()
+            SharedPreferences meShinePrefs = getSharedPreferences("MeShineStepData", Context.MODE_PRIVATE);
+            int stepGoal = meShinePrefs.getInt("step_goal", 10000);
+            meShinePrefs.edit()
                     .putInt("current_steps", todayStepsForWidget)
                     .putInt("step_goal", stepGoal)
                     .apply();
